@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../../assets/css/bootstrap.min.css" rel="stylesheet">
+    <title>Point</title>
+</head>
+
+<body>
+    <div class="container" style="margin: 5%;">
+        <div class="col-md-4">
+            <a href="#" class="btn btn-info btn-sm" data-toggle="modal" data-target="#insertexplosion">Explosion</a>
+        </div>
+        <div class="col-md-4">
+            <a href="#" class="btn btn-info btn-sm" data-toggle="modal" data-target="#inserttoto">Totoana</a>
+        </div>
+        <div class="col-md-4">
+            <a href="#" class="btn btn-info btn-sm" data-toggle="modal" data-target="#insertcentrifugation">Centrifugation</a>
+        </div>
+        <br/>
+        <br/>
+        <hr/>
+
+<h2>Explosion</h2>
+
+<table class="table table-bordered">
+     <tr>
+        <th>Date de l'explosion</th>
+        <th>Quantite Vato</th>
+    </tr>
+    <tr th:each="explosion:${explosion}">
+        <td th:text="${explosion.dateexplosion}"></td>
+        <td th:text="${explosion.quantiteVato}"></td>
+    </tr>
+</table>
+<h2>Fitotoana</h2>
+<table class="table table-bordered">
+    <tr>
+        <th>Quantite Vato</th>
+        <th>Date et heure debut</th>
+        <th>Date et heure fin</th>
+    </tr>
+    <tr th:each="totoana:${totoana}">
+        <td th:text="${totoana.quantiteTotoana}"></td>
+        <td th:text="${totoana.dateheuredebut}"></td>
+        <td th:text="${totoana.dateheurefin}"></td>
+    </tr>
+</table>
+<h2>Centrifugation</h2>
+<table class="table table-bordered">
+    <tr>
+        <th>Quantite Vato</th>
+        <th>Date et heure debut</th>
+        <th>Date et heure fin</th>
+        <th>Or obtenu</th>
+    </tr>
+    <tr th:each="centrifugation:${centrifugation}">
+        <td th:text="${centrifugation.quantiteVato}"></td>
+        <td th:text="${centrifugation.dateheuredebut}"></td>
+        <td th:text="${centrifugation.dateheurefin}"></td>
+        <td th:text="${centrifugation.quantiteVolamena}"></td>
+    </tr>
+</table>
+<br/>
+<a th:href="@{/liste/pointcarriere}" class="btn btn-info btn-sm">Retour</a>
+
+    </div>
+    <script src="../../assets/js/jquery.js"></script>
+    <script src="../../assets/js/bootstrap.min.js"></script>
+</body>
+
+</html>
+<!-- Modal insert explosion -->
+<div id="insertexplosion" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Explosion</h4>
+            </div>
+            <div class="modal-body">
+                <form th:action="'/insert/explosion/'+${id}" method="POST">
+                    <div class="form-group">
+                        <label for="nom">Date de l'explosion:</label>
+                        <input type="date" class="form-control" name="dateexplosion" required>
+                    </div>  
+                    <div class="form-group">
+                        <label for="vato">Quantite de pierre obtenu:</label>
+                        <input type="text" class="form-control" name="quantiteVato" required>
+                    </div> 
+                    <input type="submit" class="btn btn-primary" value="Valider">
+                </form>
+            </div>
+            <div class="modal-footer">
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- Modal insert toto -->
+<div id="inserttoto" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Fitotoana</h4>
+            </div>
+            <div class="modal-body">
+                <form th:action="'/insert/toto/'+${id}" method="POST">
+                    <div class="form-group">
+                        <label for="nom">Quantite: </label>
+                        <input type="text" class="form-control" name="quantiteTotoana" required>
+                    </div>  
+                    <div class="form-group">
+                        <label for="xposition">Date et heure de debut:</label>
+                        <input type="datetime-local" class="form-control" name="dateheuredebut" required>
+                    </div> 
+                    <div class="form-group">
+                        <label for="xposition">Date et heure de fin</label>
+                        <input type="datetime-local" class="form-control" name="dateheurefin" required>
+                    </div>
+                    <input type="submit" class="btn btn-primary" value="Valider">
+                </form>
+            </div>
+            <div class="modal-footer">
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- Modal insert centrifugation -->
+<div id="insertcentrifugation" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Centrifugation</h4>
+            </div>
+            <div class="modal-body">
+                <form th:action="'/insert/centrifugation/'+${id}" method="POST">
+                    <div class="form-group">
+                        <label for="nom">Quantite de pierre centrifuge:</label>
+                        <input type="text" class="form-control" name="quantiteVato" required>
+                    </div>  
+                    <div class="form-group">
+                        <label for="xposition">Quantite d'or obtenu:</label>
+                        <input type="text" class="form-control" name="quantiteVolamena" required>
+                    </div> 
+                    <div class="form-group">
+                        <label for="xposition">Date et heure de debut:</label>
+                        <input type="datetime-local" class="form-control" name="dateheuredebut" required>
+                    </div> 
+                    <div class="form-group">
+                        <label for="xposition">Date et heure de fin</label>
+                        <input type="datetime-local" class="form-control" name="dateheurefin" required>
+                    </div>
+                    <input type="submit" class="btn btn-primary" value="Valider">
+                </form>
+            </div>
+            <div class="modal-footer">
+            </div>
+
+        </div>
+    </div>
+</div>
