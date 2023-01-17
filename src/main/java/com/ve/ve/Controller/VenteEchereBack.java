@@ -26,15 +26,6 @@ public class VenteEchereBack {
 
     @Autowired 
     private CategorieRepository categorie;
-    // @RequestMapping(value = "/getIdPointSqlite", method = RequestMethod.GET,
-    // produces = "application/json")
-    // @ResponseBody
-    // @CrossOrigin
-    // public Map<String, Object> getIdPointSqlite(HttpServletRequest request) {
-    // Map<String, Object> map = new HashMap<>();
-    // map.put("data",point.getIdPointSqlite(Integer.parseInt(request.getParameter("id"))));
-    // return map;
-    // }
 
      /* LOGIN */
      @RequestMapping(value = "/login/traitement", method = RequestMethod.POST, produces = "application/json")
@@ -70,11 +61,13 @@ public class VenteEchereBack {
     @RequestMapping(value = "/incription", method = RequestMethod.POST,produces = "application/json")
     @ResponseBody
     @CrossOrigin
-    public void inscriptionAdmin(HttpServletRequest request) {
+    public Map<String,Object> inscriptionAdmin(HttpServletRequest request) {
+        Map<String,Object> map=new HashMap<>();
         AdminLogin admin=new AdminLogin();
         admin.setAdminUser(request.getParameter("adminlogin"));
         admin.setPwd(request.getParameter("pwd"));
         user.insertAdminLogin(admin);
+        return map;
     }
 
     @RequestMapping(value = "/insertcategorie", method = RequestMethod.POST,produces = "application/json")
