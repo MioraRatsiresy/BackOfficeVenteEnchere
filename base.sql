@@ -203,4 +203,10 @@ INSERT INTO CompteClient(id, montant, etat, Clientid,actionTransaction) VALUES (
 INSERT INTO CompteClient(id, montant, etat, Clientid,actionTransaction) VALUES (2, 100000, 0, 1,4);
 INSERT INTO CompteClient(id, montant, etat, Clientid,actionTransaction) VALUES (3, 20000, 1, 2,0);
 INSERT INTO Enchere(id, produit, libelle, dateHeure, prixMin, duree, etat,idclient) VALUES (1, 1, 'Bac a litiere', '2023-01-13 15:23:00', 10000, 1, '0',1);
-INSERT INTO Enchere(id, produit, libelle, dateHeure, prixMin, duree, etat,idclient) VALUES (2, 7, 'Violon', '2023-01-13 15:30:00', 5000, 4, '1',2);
+INSERT INTO Enchere(id, produit, libelle, dateHeure, prixMin, duree, etat,idclient) VALUES (2, 7, 'Violon', '2023-01-13 15:30:00', 5000, 4, '7',2);
+
+--------------------------------------------------------------------------------------------------------
+create table chiffreObtenuSite(
+    montant DOUBLE PRECISION,
+    dateObtention date
+);
