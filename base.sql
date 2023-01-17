@@ -65,7 +65,7 @@ CREATE TABLE Client (
 CREATE TABLE CompteClient (
     id SERIAL NOT NULL,
     montant float8 NOT NULL,
-    etat int4 default 0 NOT NULL,
+    etat int4 default 0 NOT NULL, --2 accepte 8 refusé
     Clientid int4 NOT NULL, 
     actionTransaction int default 0 --0 debit --4 credit
 );
