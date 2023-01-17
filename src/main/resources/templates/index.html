@@ -24,10 +24,10 @@
 					<form role="form">
 						<fieldset>
 							<div class="form-group">
-								<input id ="email" class="form-control" placeholder="Identifiant" name="email" type="text" autofocus="">
+								<input id ="email" th:value="Miora" class="form-control" placeholder="Identifiant" name="email" type="text" autofocus="">
 							</div>
 							<div class="form-group">
-								<input id="pwd" class="form-control" placeholder="Mot de passe" name="password" type="password" value="">
+								<input id="pwd" th:value="miora" class="form-control" placeholder="Mot de passe" name="password" type="password" value="">
 							</div>
 							<button type="button" class="btn btn-primary btn-block" onclick="traitementLogin();">Log in</button>
 					</form>
