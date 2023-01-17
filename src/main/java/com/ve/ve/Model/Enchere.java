@@ -50,4 +50,11 @@ public class Enchere {
     public void setEtat(String etat) {
         this.etat = etat;
     }
+    private int idclient;
+    public int getIdclient() {
+        return idclient;
+    }
+    public void setIdclient(int idclient) {
+        this.idclient = idclient;
+    }
 }

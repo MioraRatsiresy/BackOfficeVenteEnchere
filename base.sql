@@ -73,10 +73,12 @@ CREATE TABLE Enchere (
     prixMin float8 NOT NULL,
     duree float8 NOT NULL, -- en heure ou minute
     etat varchar(20) NOT NULL, --0 en cours // 7 fini
+    idclient int not null,
     PRIMARY KEY (id)
 );
 
 ALTER TABLE Enchere ADD FOREIGN KEY(produit) REFERENCES Produit(id);
+ALTER TABLE Enchere ADD FOREIGN KEY(idclient) REFERENCES Client(id);
 
 ----VIEW
 CREATE VIEW EnchereDetail as 

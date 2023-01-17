@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ve.ve.Model.MiserEnchere;
+import com.ve.ve.Model.PhotoEnchere;
 import com.ve.ve.Repository.MiserEnchereRepository;
 import com.ve.ve.Repository.PhotoEnchereRepository;
 
@@ -26,13 +27,15 @@ public class MongoController {
     @Autowired
     private MiserEnchereRepository miser;
     
-    @RequestMapping(value = "/test", method = RequestMethod.GET,produces = "application/json")
+    @RequestMapping(value = "/insertPhoto/{id}", method = RequestMethod.POST,produces = "application/json")
     @ResponseBody
     @CrossOrigin
-    public Map<String,Object> listeProfil() {
-        Map<String,Object> map=new HashMap<>();
-        map.put("photo",photo.findAll());
-        return map;
+    public String insertPhoto(@PathVariable int id,HttpServletRequest request) {
+        PhotoEnchere photoenchere=new PhotoEnchere();
+        photoenchere.setIdEnchere(id);
+        photoenchere.setPhoto(request.getParameter("photo"));
+        photo.save(photoenchere);
+       return "Insertion avec succes";
     }
 
     @RequestMapping(value = "/miser/{id}", method = RequestMethod.POST,produces = "application/json")
