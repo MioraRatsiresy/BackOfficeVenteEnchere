@@ -1,13 +1,13 @@
-package com.vehicule.vehicule;
+package com.ve.ve;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class SynchronisationApplication {
+public class VenteEnchere {
 
 	public static void main(String[] args) {
-		SpringApplication.run(SynchronisationApplication.class, args);
+		SpringApplication.run(VenteEnchere.class, args);
 	}
 
 }
