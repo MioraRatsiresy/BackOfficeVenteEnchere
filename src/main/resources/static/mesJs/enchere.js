@@ -1,3 +1,4 @@
+
 function traitementLogin() {
     console.log("Traitement login");
     var email = document.getElementById("email").value;
@@ -31,7 +32,8 @@ function listeCategorie() {
             xmlhttp.onreadystatechange = function () {
                 if (this.readyState == 4 && this.status == 200) {
                     console.log("OK");
-                    document.getElementById("categorie").innerHTML = this.responseText;
+                    document.getElementById("contenu").innerHTML = null;
+                    document.getElementById("contenu").innerHTML = this.responseText;
                 }
             }
             xmlhttp.open("GET", "http://localhost:4444/afficherListeCategorie");
@@ -56,13 +58,15 @@ function ajouterNouvelleCategorie() {
                 if (this.readyState == 4 && this.status == 200) {
                     console.log("OK");
                     $('#exampleModal').modal('hide');
-                    document.getElementById("categorie").innerHTML = this.responseText;
+                    //document.getElementById("contenu").innerHTML = null;
+                    document.getElementById("contenu").innerHTML = this.responseText;
+
                 }
             }
             xmlhttp.open("GET", "http://localhost:4444/afficherListeCategorie");
             xmlhttp.send();
         }
     }
-    xmlhttp.open("POST", "http://localhost:4444/insertcategorie?categorie="+categorie);
+    xmlhttp.open("POST", "http://localhost:4444/insertcategorie?categorie=" + categorie);
     xmlhttp.send();
 }

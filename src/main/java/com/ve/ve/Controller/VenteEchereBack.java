@@ -2,12 +2,14 @@ package com.ve.ve.Controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -15,11 +17,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.http.HttpStatus;
 
 import com.ve.ve.Model.AdminLogin;
 import com.ve.ve.Model.Categorie;
+import com.ve.ve.Model.StatistiqueCategorie;
 import com.ve.ve.Repository.AdminLoginRepository;
 import com.ve.ve.Repository.CategorieRepository;
+import com.ve.ve.Repository.StatistiqueCategorieRepository;
 
 @Controller
 public class VenteEchereBack {
@@ -28,6 +33,9 @@ public class VenteEchereBack {
 
     @Autowired
     private CategorieRepository categorie;
+
+    @Autowired
+    private StatistiqueCategorieRepository statistiqueCategorie;
 
     /* LOGIN */
     @RequestMapping(value = "/login/traitement", method = RequestMethod.POST, produces = "application/json")
@@ -106,6 +114,18 @@ public class VenteEchereBack {
         ArrayList<Categorie> listeCategorie = categorie.getCategorie();
         model.addAttribute("categorie", listeCategorie);
         return "listeCategorie";
+    }
+
+    @GetMapping("/statistiqueCategorie")
+    public String viewStatistique() {
+        return "statistique";
+    }
+
+    @RequestMapping("/piechartdata")
+	public ResponseEntity<?> getDataForPiechart(){
+        ArrayList<StatistiqueCategorie> piechartData = statistiqueCategorie.getAll();
+        
+		return new ResponseEntity<>(piechartData, HttpStatus.OK);
     }
 
 }

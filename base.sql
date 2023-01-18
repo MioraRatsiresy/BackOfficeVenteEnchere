@@ -210,3 +210,12 @@ create table chiffreObtenuSite(
     montant DOUBLE PRECISION,
     dateObtention date
 );
+
+create or replace view v_produit as 
+select p.*, c.categorie as nomCategorie from produit p right join categorie c on p.categorie=c.id;
+
+create or replace view v_enchereCategorie as 
+select e.*, vp.categorie, vp.nomCategorie from enchere e right join v_produit vp on e.produit=vp.id;
+
+create or replace view v_statistiqueCategorie as 
+select count(ve.id) as nombre,ve.nomCategorie as categorie from v_enchereCategorie ve group by(ve.nomCategorie);
