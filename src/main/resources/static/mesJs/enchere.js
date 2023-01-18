@@ -124,15 +124,57 @@ function commission() {
     xmlhttp.send();
 }
 
-function updateCommission(){
-    var pourcentage=document.getElementById("pourcentage");
+function updateCommission() {
+    var pourcentage = document.getElementById("pourcentage").value;
     const xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
-           commission();
+            $('#commission').modal('hide');
+            commission();
         }
     }
-    xmlhttp.open("PUT", "http://localhost:4444/updatecommission/"+pourcentage);
+    xmlhttp.open("PUT", "http://localhost:4444/updatecommission/" + pourcentage);
     xmlhttp.send();
 }
 
+function listeProduit() {
+    const xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            console.log("OK");
+            document.getElementById("contenu").innerHTML = null;
+            document.getElementById("contenu1").innerHTML = null;
+            document.getElementById("contenu").innerHTML = this.responseText;
+        }
+    }
+    xmlhttp.open("GET", "http://localhost:4444/afficherListeProduit");
+    xmlhttp.send();
+}
+
+function ajouterNouveauProduit() {
+    var produit = document.getElementById("nomProduit").value;
+    var categorie = document.getElementById("idCategorie").value;
+    console.log(produit);
+    console.log(categorie);
+    const xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            console.log(this.responseText);
+            //document.getElementById("categorie").innerHTML=this.responseText;
+            const xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    console.log("OK");
+                    $('#exampleModal').modal('hide');
+                    //document.getElementById("contenu").innerHTML = null;
+                    document.getElementById("contenu").innerHTML = this.responseText;
+
+                }
+            }
+            xmlhttp.open("GET", "http://localhost:4444/afficherListeProduit");
+            xmlhttp.send();
+        }
+    }
+    xmlhttp.open("POST", "http://localhost:4444/insertProduit?categorie=" + categorie +"&produit="+produit);
+    xmlhttp.send();
+}

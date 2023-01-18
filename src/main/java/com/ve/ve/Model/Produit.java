@@ -22,4 +22,11 @@ public class Produit {
     public void setCategorie(int categorie) {
         this.categorie = categorie;
     }
+    private String nomCategorie;
+    public String getNomCategorie() {
+        return nomCategorie;
+    }
+    public void setNomCategorie(String nomCategorie) {
+        this.nomCategorie = nomCategorie;
+    }
 }

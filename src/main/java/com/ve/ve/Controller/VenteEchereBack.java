@@ -23,10 +23,12 @@ import com.google.gson.JsonObject;
 import com.ve.ve.Model.AdminLogin;
 import com.ve.ve.Model.Categorie;
 import com.ve.ve.Model.Commission;
+import com.ve.ve.Model.Produit;
 import com.ve.ve.Model.StatistiqueCategorie;
 import com.ve.ve.Model.StatistiqueChiffreAffaire;
 import com.ve.ve.Repository.AdminLoginRepository;
 import com.ve.ve.Repository.CategorieRepository;
+import com.ve.ve.Repository.ProduitRepository;
 import com.ve.ve.Repository.StatistiqueCategorieRepository;
 import com.ve.ve.Repository.StatistiqueChiffreAffaireRepository;
 
@@ -43,6 +45,9 @@ public class VenteEchereBack {
 
     @Autowired
     private StatistiqueChiffreAffaireRepository statistiqueChiffreAffaire;
+
+    @Autowired
+    private ProduitRepository produitRepository;
 
     /* LOGIN */
     @RequestMapping(value = "/login/traitement", method = RequestMethod.POST, produces = "application/json")
@@ -222,6 +227,34 @@ public class VenteEchereBack {
         com.setPourcentage(pourcentage);
         categorie.updateCommission(com);
         map.put("Status","Success");
+        return map;
+    }
+
+    @GetMapping("/afficherListeProduit")
+    public String afficherListeProduit(Model model) {
+        ArrayList<Produit> listeProduit = produitRepository.getAll();
+        model.addAttribute("produit", listeProduit);
+        ArrayList<Categorie> listeCategorie = categorie.getCategorie();
+        model.addAttribute("categorie", listeCategorie);
+        return "listeProduit";
+    }
+
+    @RequestMapping(value = "/insertProduit", method = RequestMethod.POST, produces = "application/json")
+    @ResponseBody
+    @CrossOrigin
+    public void insertProduit(HttpServletRequest request) {
+        Produit produit=new Produit();
+        produit.setProduit(request.getParameter("produit"));
+        produit.setCategorie(Integer.parseInt(request.getParameter("categorie")));
+        produitRepository.insertProduit(produit);
+    }
+
+    @RequestMapping(value = "/listeProduit", method = RequestMethod.GET, produces = "application/json")
+    @ResponseBody
+    @CrossOrigin
+    public Map<String, Object> listeProduit(HttpServletRequest request) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("produit", produitRepository.getAll());
         return map;
     }
 
