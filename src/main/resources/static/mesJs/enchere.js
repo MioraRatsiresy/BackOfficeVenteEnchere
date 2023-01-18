@@ -22,7 +22,6 @@ function traitementLogin() {
 }
 
 function listeCategorie() {
-    console.log("Liste categorie");
     const xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
@@ -95,7 +94,7 @@ function listeDemande() {
     xmlhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
             console.log(this.responseText);
-            document.getElementById("contenu1").innerHTML=null;
+            document.getElementById("contenu1").innerHTML = null;
             document.getElementById("contenu").innerHTML = this.responseText;
         }
     }
@@ -103,15 +102,25 @@ function listeDemande() {
     xmlhttp.send();
 }
 
-function validation(id,etat){
+function validation(id, etat) {
     const xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
-            console.log(this.responseText);
-            this.listeDemande();
+            listeDemande();
         }
     }
-    xmlhttp.open("GET", "http://localhost:4444/validerdemande/"+id+"/"+etat);
+    xmlhttp.open("GET", "http://localhost:4444/validerdemande/" + id + "/" + etat);
+    xmlhttp.send();
+}
+function commission() {
+    const xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            document.getElementById("contenu1").innerHTML = null;
+            document.getElementById("contenu").innerHTML = this.responseText;
+        }
+    }
+    xmlhttp.open("GET", "http://localhost:4444/voircommission");
     xmlhttp.send();
 }
 

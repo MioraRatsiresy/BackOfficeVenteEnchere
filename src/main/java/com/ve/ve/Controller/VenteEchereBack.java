@@ -198,12 +198,19 @@ public class VenteEchereBack {
     }
 
     @GetMapping("/validerdemande/{id}/{etat}")
+    @ResponseBody
      public Map<String, Object> validerdemande(@PathVariable int id ,@PathVariable int etat){
         Map<String, Object> map = new HashMap<>();
         user.validerRechargementCompte(id, etat);
         map.put("Status","Success");
         return map;
-     }
+    }
+
+    @GetMapping("/voircommission")
+    public String voircommission(Model model){
+        model.addAttribute("commission", categorie.getCommission());
+        return "commission";
+    }
 
 
 }
