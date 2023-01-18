@@ -30,7 +30,7 @@ public class CategorieRepository implements CategorieDAO{
 
     @Override
     public void updateCommission(Commission com) {
-        String sql="Update commission set commission="+com.getPourcentage()+" where id="+com.getId();
+        String sql="Update commission set commission="+com.getPourcentage();
         jdbcTemplate.update(sql);        
     }
 

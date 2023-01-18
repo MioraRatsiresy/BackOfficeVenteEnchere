@@ -124,3 +124,15 @@ function commission() {
     xmlhttp.send();
 }
 
+function updateCommission(){
+    var pourcentage=document.getElementById("pourcentage");
+    const xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+           commission();
+        }
+    }
+    xmlhttp.open("PUT", "http://localhost:4444/updatecommission/"+pourcentage);
+    xmlhttp.send();
+}
+

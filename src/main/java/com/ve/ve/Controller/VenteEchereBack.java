@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -21,6 +22,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.ve.ve.Model.AdminLogin;
 import com.ve.ve.Model.Categorie;
+import com.ve.ve.Model.Commission;
 import com.ve.ve.Model.StatistiqueCategorie;
 import com.ve.ve.Model.StatistiqueChiffreAffaire;
 import com.ve.ve.Repository.AdminLoginRepository;
@@ -210,6 +212,17 @@ public class VenteEchereBack {
     public String voircommission(Model model){
         model.addAttribute("commission", categorie.getCommission());
         return "commission";
+    }
+
+    @PutMapping("/updatecommission/{pourcentage}")
+    @ResponseBody
+    public Map<String, Object> updateCommission(@PathVariable double pourcentage){
+        Map<String, Object> map = new HashMap<>();
+        Commission com=new Commission();
+        com.setPourcentage(pourcentage);
+        categorie.updateCommission(com);
+        map.put("Status","Success");
+        return map;
     }
 
 
