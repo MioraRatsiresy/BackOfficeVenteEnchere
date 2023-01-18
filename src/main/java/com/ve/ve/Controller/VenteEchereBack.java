@@ -110,6 +110,7 @@ public class VenteEchereBack {
         return "listeCategorie";
     }
 
+    /*Miora */
     /* LOGOUT */
 
     @RequestMapping(value = "/logout", method = RequestMethod.GET, produces = "application/json")
@@ -124,5 +125,58 @@ public class VenteEchereBack {
         map.put("status", "200");
         return map;
     }
+
+    /*MBOLA */
+    @GetMapping("/statistiqueCategorie")
+    public String viewStatistique() {
+        return "statistique";
+    }
+
+    @RequestMapping("/piechartdata")
+    @ResponseBody
+    // public ResponseEntity<?> getDataForPiechart(){
+    public String getDataForPiechart() {
+        //ArrayList<StatistiqueCategorie> piechartData = statistiqueCategorie.getAll();
+        // return new ResponseEntity<>(piechartData, HttpStatus.OK);
+        ArrayList<StatistiqueCategorie> dataList = statistiqueCategorie.getAll();       
+        JsonArray jsonArrayCategory = new JsonArray();
+        JsonArray jsonArraySeries = new JsonArray();
+        JsonArray jsonArraymois = new JsonArray();
+        JsonArray jsonArraymontant = new JsonArray();
+        JsonObject jsonObject = new JsonObject();
+        dataList.forEach(data -> {
+            jsonArrayCategory.add(data.getNombre());
+            jsonArraySeries.add(data.getCategorie());
+        });
+        ArrayList<StatistiqueChiffreAffaire> dataList1 = statistiqueChiffreAffaire.getAll();
+        dataList1.forEach(data -> { 
+            jsonArraymois.add(data.getNomMois());
+            jsonArraymontant.add(data.getMontant()); 
+        });
+        jsonObject.add("nombre", jsonArrayCategory);
+        jsonObject.add("categorie", jsonArraySeries);
+        jsonObject.add("mois", jsonArraymois);
+        jsonObject.add("montant", jsonArraymontant);
+        return jsonObject.toString();
+    }
+
+    @RequestMapping("/linechartdata")
+    @ResponseBody
+    public String getDataFromDB() {
+        ArrayList<StatistiqueChiffreAffaire> dataList = statistiqueChiffreAffaire.getAll();
+        JsonArray jsonArrayCategory = new JsonArray();
+        JsonArray jsonArraySeries = new JsonArray();
+        JsonObject jsonObject = new JsonObject();
+        dataList.forEach(data -> {
+            jsonArrayCategory.add(data.getNomMois());
+            jsonArraySeries.add(data.getMontant());
+        });
+        jsonObject.add("categories", jsonArrayCategory);
+        jsonObject.add("series", jsonArraySeries);
+        return jsonObject.toString();
+    }
+
+
+
 
 }
