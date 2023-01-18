@@ -1,31 +1,31 @@
-
 /* for line chart */
-function drawLineChart(category, series) {
-	Highcharts.chart('container', {
-		chart: {
-			type: 'line',
-			width: 500
-		},
-
-		title: {
-			text: 'Width is set to 300px'
-		},
-
-		xAxis: {
-			categories: category
-		},
-
-		tooltip: {
-			formatter: function () {
-				return '<strong>' + this.x + ': </strong>' + this.y;
-			}
-		},
-
-		series: [{
-			data: series
-		}]
+function drawLineChart(category, series){
+	Highcharts.chart('contenu1', {
+	    chart: {
+	        type: 'line',
+	        //width: 500
+	    },
+	    
+	    title: {
+	        text: 'Statistique chiffre d\'affaire'
+	    },
+	
+	    xAxis: {
+	        categories: category
+	    },
+	    
+	    tooltip: {
+	        formatter: function() {
+	          return '<strong>'+this.x+': </strong>'+ this.y;
+	        }
+	    },
+	
+	    series: [{
+	        data: series
+	    }]
 	});
 }
+
 
 /* for multiple line chart */
 function drawMultipleLineChart(formatteddata) {
@@ -86,15 +86,15 @@ function viewStatistique() {
 		if (this.readyState == 4 && this.status == 200) {
 			console.log("OK");
 			var result = JSON.parse(this.responseText);
-			console.log(result[0]["categorie"]);
+			console.log(result["categorie"][0]);
 			var series = [];
 			var data = [];
-
-			for (var i = 0; i < result.length; i++) {
+			console.log(result);
+			for (var i = 0; i < result["categorie"].length; i++) {
 				var object = {};
-				console.log("RESULT : "+result[i].categorie);
-				object.name = result[i]["categorie"];
-				object.y = result[i]["nombre"];
+				//console.log("RESULT : " + result[i].categorie);
+				object.name = result["categorie"][i];
+				object.y = result["nombre"][i];
 				data.push(object);
 			}
 			//console.log("Data="+data[0][name]);
@@ -107,7 +107,12 @@ function viewStatistique() {
 			console.log(series);
 			//document.getElementById("contenu").innerHTML = drawPieChart(series);
 			drawPieChart(series);
-			
+			//drawLineChart();*/
+			var category = result["mois"]
+			var series = result["montant"];
+			console.log("Mois="+category);
+			console.log("Montant="+series);
+			drawLineChart(category, series);
 		}
 	}
 	xmlhttp.open("GET", "http://localhost:4444/piechartdata");

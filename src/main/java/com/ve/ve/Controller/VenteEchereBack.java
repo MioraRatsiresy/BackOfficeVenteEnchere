@@ -19,12 +19,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.http.HttpStatus;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.ve.ve.Model.AdminLogin;
 import com.ve.ve.Model.Categorie;
 import com.ve.ve.Model.StatistiqueCategorie;
+import com.ve.ve.Model.StatistiqueChiffreAffaire;
 import com.ve.ve.Repository.AdminLoginRepository;
 import com.ve.ve.Repository.CategorieRepository;
 import com.ve.ve.Repository.StatistiqueCategorieRepository;
+import com.ve.ve.Repository.StatistiqueChiffreAffaireRepository;
 
 @Controller
 public class VenteEchereBack {
@@ -36,6 +40,9 @@ public class VenteEchereBack {
 
     @Autowired
     private StatistiqueCategorieRepository statistiqueCategorie;
+
+    @Autowired
+    private StatistiqueChiffreAffaireRepository statistiqueChiffreAffaire;
 
     /* LOGIN */
     @RequestMapping(value = "/login/traitement", method = RequestMethod.POST, produces = "application/json")
@@ -122,10 +129,47 @@ public class VenteEchereBack {
     }
 
     @RequestMapping("/piechartdata")
-	public ResponseEntity<?> getDataForPiechart(){
-        ArrayList<StatistiqueCategorie> piechartData = statistiqueCategorie.getAll();
-        
-		return new ResponseEntity<>(piechartData, HttpStatus.OK);
+    @ResponseBody
+    // public ResponseEntity<?> getDataForPiechart(){
+    public String getDataForPiechart() {
+        //ArrayList<StatistiqueCategorie> piechartData = statistiqueCategorie.getAll();
+        // return new ResponseEntity<>(piechartData, HttpStatus.OK);
+        ArrayList<StatistiqueCategorie> dataList = statistiqueCategorie.getAll();       
+        JsonArray jsonArrayCategory = new JsonArray();
+        JsonArray jsonArraySeries = new JsonArray();
+        JsonArray jsonArraymois = new JsonArray();
+        JsonArray jsonArraymontant = new JsonArray();
+        JsonObject jsonObject = new JsonObject();
+        dataList.forEach(data -> {
+            jsonArrayCategory.add(data.getNombre());
+            jsonArraySeries.add(data.getCategorie());
+        });
+        ArrayList<StatistiqueChiffreAffaire> dataList1 = statistiqueChiffreAffaire.getAll();
+        dataList1.forEach(data -> { 
+            jsonArraymois.add(data.getNomMois());
+            jsonArraymontant.add(data.getMontant()); 
+        });
+        jsonObject.add("nombre", jsonArrayCategory);
+        jsonObject.add("categorie", jsonArraySeries);
+        jsonObject.add("mois", jsonArraymois);
+        jsonObject.add("montant", jsonArraymontant);
+        return jsonObject.toString();
+    }
+
+    @RequestMapping("/linechartdata")
+    @ResponseBody
+    public String getDataFromDB() {
+        ArrayList<StatistiqueChiffreAffaire> dataList = statistiqueChiffreAffaire.getAll();
+        JsonArray jsonArrayCategory = new JsonArray();
+        JsonArray jsonArraySeries = new JsonArray();
+        JsonObject jsonObject = new JsonObject();
+        dataList.forEach(data -> {
+            jsonArrayCategory.add(data.getNomMois());
+            jsonArraySeries.add(data.getMontant());
+        });
+        jsonObject.add("categories", jsonArrayCategory);
+        jsonObject.add("series", jsonArraySeries);
+        return jsonObject.toString();
     }
 
 }

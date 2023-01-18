@@ -13,10 +13,6 @@ public class StatistiqueCategorie {
     private int nombre;
     private String categorie;
 
-    public String toString() {
-        return "PiechartData [nombre=" + nombre + ", categorie=" + categorie + "]";
-    }
-
     /**
      * @return the nombre
      */

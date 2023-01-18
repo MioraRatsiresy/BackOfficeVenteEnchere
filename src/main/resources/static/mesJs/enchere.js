@@ -33,6 +33,7 @@ function listeCategorie() {
                 if (this.readyState == 4 && this.status == 200) {
                     console.log("OK");
                     document.getElementById("contenu").innerHTML = null;
+                    document.getElementById("contenu1").innerHTML = null;
                     document.getElementById("contenu").innerHTML = this.responseText;
                 }
             }
