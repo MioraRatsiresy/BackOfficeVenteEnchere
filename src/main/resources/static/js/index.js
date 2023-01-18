@@ -7,7 +7,7 @@ function drawLineChart(category, series){
 	    },
 	    
 	    title: {
-	        text: 'Statistique chiffre d\'affaire'
+	        text: 'Chiffre d\'affaire'
 	    },
 	
 	    xAxis: {
@@ -130,7 +130,7 @@ function drawPieChart(series) {
 			type: 'pie'
 		},
 		title: {
-			text: 'Statistique sur les catégories'
+			text: 'Nombre de produits vendus pour chaque catégorie'
 		},
 		tooltip: {
 			formatter: function () {

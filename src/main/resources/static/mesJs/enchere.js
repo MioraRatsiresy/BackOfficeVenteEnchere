@@ -175,6 +175,93 @@ function ajouterNouveauProduit() {
             xmlhttp.send();
         }
     }
-    xmlhttp.open("POST", "http://localhost:4444/insertProduit?categorie=" + categorie +"&produit="+produit);
+    xmlhttp.open("POST", "http://localhost:4444/insertProduit?categorie=" + categorie + "&produit=" + produit);
+    xmlhttp.send();
+}
+
+function parametreEnchereAdmin() {
+    const xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            console.log("OK");
+            document.getElementById("contenu").innerHTML = null;
+            document.getElementById("contenu1").innerHTML = null;
+            document.getElementById("contenu").innerHTML = this.responseText;
+        }
+    }
+    xmlhttp.open("GET", "http://localhost:4444/listeEnchereAdmin");
+    xmlhttp.send();
+}
+
+function insertEnchereAdmin() {
+    var categorie = document.getElementById("categorie").value;
+    var duree = document.getElementById("duree").value;
+    console.log(categorie);
+    console.log(duree);
+    const xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            console.log("OK");
+            //document.getElementById("categorie").innerHTML=this.responseText;
+            const xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    console.log("OK");
+                    $('#exampleModal').modal('hide');
+                    //document.getElementById("contenu").innerHTML = null;
+                    document.getElementById("contenu").innerHTML = this.responseText;
+
+                }
+            }
+            xmlhttp.open("GET", "http://localhost:4444/listeEnchereAdmin");
+            xmlhttp.send();
+        }
+    }
+    xmlhttp.open("POST", "http://localhost:4444/insertEnchereAdmin?categorie=" + categorie + "&duree=" + duree);
+    xmlhttp.send();
+}
+
+function openModalUpdate(id) {
+    console.log(id);
+    const xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            console.log("OK");
+            $('#exampleModal1').modal('show');
+            var retour = JSON.parse(this.responseText);
+            console.log(retour[0]["duree"]);
+            document.getElementById("dureeToUpdate").value = retour[0]["duree"];
+            document.getElementById("idToUpdate").value = id;
+        }
+    }
+    xmlhttp.open("GET", "http://localhost:4444/getInfoToUpdate?id=" + id);
+    xmlhttp.send();
+}
+
+function updateEnchereAdmin() {
+    var id = document.getElementById("idToUpdate").value;
+    var nouvelleDuree = document.getElementById("dureeToUpdate").value;
+    console.log(id);
+    console.log(nouvelleDuree);
+    const xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            console.log("OK");
+            //document.getElementById("categorie").innerHTML=this.responseText;
+            const xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    console.log("OK");
+                    $('#exampleModal1').modal('hide');
+                    //document.getElementById("contenu").innerHTML = null;
+                    document.getElementById("contenu").innerHTML = this.responseText;
+
+                }
+            }
+            xmlhttp.open("GET", "http://localhost:4444/listeEnchereAdmin");
+            xmlhttp.send();
+        }
+    }
+    xmlhttp.open("PUT", "http://localhost:4444/updateEnchereAdminWs?duree=" + nouvelleDuree + "&id=" + id);
     xmlhttp.send();
 }

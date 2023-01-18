@@ -14,5 +14,6 @@ public interface CategorieDAO {
 
     ArrayList<Commission> getCommission();
 
+    ArrayList<Categorie> getCategorieSansDuree();
 
 }

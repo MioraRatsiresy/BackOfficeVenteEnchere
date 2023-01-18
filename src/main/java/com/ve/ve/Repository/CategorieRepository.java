@@ -16,6 +16,7 @@ public class CategorieRepository implements CategorieDAO{
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+    
     @Override
     public ArrayList<Categorie> getCategorie() {
         String sql = "select * from categorie";
@@ -39,6 +40,12 @@ public class CategorieRepository implements CategorieDAO{
         String sql = "select * from commission";
         return (ArrayList<Commission>) jdbcTemplate.query(sql,new BeanPropertyRowMapper<Commission>(Commission.class));
 
+    }
+
+    @Override
+    public ArrayList<Categorie> getCategorieSansDuree() {
+        String sql = "select*from categorie where id not in (select categorieid from enchereadmin)";
+        return (ArrayList<Categorie>) jdbcTemplate.query(sql,new BeanPropertyRowMapper<Categorie>(Categorie.class));
     }
     
 }

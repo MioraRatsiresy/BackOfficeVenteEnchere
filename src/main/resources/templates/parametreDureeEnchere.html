@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link href="assetsTemplate/css/font-awesome.min.css" rel="stylesheet">
+</head>
+
+<body>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Paramètre sur la durée des enchères
+                    <button type="button" class="btn btn-md btn-info pull-right" data-toggle="modal"
+                        data-target="#exampleModal">Nouveau paramètre</button>
+                </div>
+                <div class="panel-body">
+                    <div class="canvas-wrapper">
+                        <table class="table">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col">Catégorie</th>
+                                    <th scope="col">Durée en jour</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="enchereAdmin:${enchereAdmin}">
+                                    <td th:text="${enchereAdmin.categorie}"></td>
+                                    <td th:text="${enchereAdmin.duree}"></td>
+                                    <td><a href="#" th:onclick="'openModalUpdate('+${enchereAdmin.id}+');'"><i class="fa fa-edit"></i></a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Nouveau paramètre</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Durée en jour</label>
+                        <input class="form-control" id="duree" type="number" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Catégorie</label>
+                        <select name="idCategorie" id="categorie" class="form-control">
+                            <option value="">Choisissez une catégorie</option>
+                            <option th:value="${categorie.id}" th:each="categorie:${categorie}"
+                                th:text="${categorie.categorie}"></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary pull-left" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success" onclick="insertEnchereAdmin();">Ajouter</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Update paramètre</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Durée en jour</label>
+                        <input class="form-control" id="dureeToUpdate" type="number" min="0">
+                        <input type="hidden" id="idToUpdate">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary pull-left" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-warning" onclick="updateEnchereAdmin();">Update</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
