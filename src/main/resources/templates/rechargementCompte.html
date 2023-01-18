@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Liste des demandes
+                </div>
+                <div class="panel-body">
+                    <div class="canvas-wrapper">
+                        <table class="table">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col">Id</th>
+                                    <th scope="col">Nom</th>
+                                    <th scope="col">Prenoms</th>
+                                    <th scope="col">Montant</th>
+                                    <th scope="col"></th>
+                                    <th scope="col"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="demande:${demande}">
+                                    <th scope="row" th:text="${demande.id}"></th>
+                                    <td th:text="${demande.nom}"></td>
+                                    <td th:text="${demande.prenom}"></td>
+                                    <td th:text="${demande.montant}"></td>
+                                    <td><a href="#" th:onclick="'validation('+${demande.id}+',3);'" class="btn btn-md btn-success">Valider</a></td>
+                                    <td><a href="#" th:onclick="'validation('+${demande.id}+',8);'" class="btn btn-md btn-danger">Refuser</a></td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

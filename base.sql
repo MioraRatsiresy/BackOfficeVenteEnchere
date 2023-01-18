@@ -65,7 +65,7 @@ CREATE TABLE Client (
 CREATE TABLE CompteClient (
     id SERIAL NOT NULL,
     montant float8 NOT NULL,
-    etat int4 default 0 NOT NULL, --2 accepte 8 refusé
+    etat int4 default 0 NOT NULL, --0 en cours //3 validé // 8 refusé
     Clientid int4 NOT NULL, 
     actionTransaction int default 0 --0 debit --4 credit
 );
@@ -98,17 +98,17 @@ from Enchere join Produit on Produit.id=Enchere.produit join Categorie on Catego
 -- ALTER TABLE CompteClient ADD CONSTRAINT FKCompteClie643909 FOREIGN KEY (Clientid) REFERENCES Client (id);
 -- ALTER TABLE Enchere ADD CONSTRAINT FKEnchere812038 FOREIGN KEY (SousCategorieid) REFERENCES SousCategorie (id);
 -- ALTER TABLE PhotoEnchere ADD CONSTRAINT FKPhotoEnche511259 FOREIGN KEY (Enchereid) REFERENCES Enchere (id);
-INSERT INTO AdminLogin(id, adminUser, pwd) VALUES (1, 'Miora', 'miora');
-INSERT INTO Categorie(id, categorie) VALUES (1, 'Animalerie');
-INSERT INTO Categorie(id, categorie) VALUES (2, 'Art, Antiquite');
-INSERT INTO Categorie(id, categorie) VALUES (3, 'Bijoux, Montres');
-INSERT INTO Categorie(id, categorie) VALUES (4, 'Immobilier');
-INSERT INTO Categorie(id, categorie) VALUES (5, 'Bricolage');
-INSERT INTO Categorie(id, categorie) VALUES (6, 'Ceramique, Verre');
-INSERT INTO Categorie(id, categorie) VALUES (7, 'Instrument de musique');
-INSERT INTO Categorie(id, categorie) VALUES (8, 'Jeux video');
-INSERT INTO Categorie(id, categorie) VALUES (9, 'Jouet et jeux');
-INSERT INTO Categorie(id, categorie) VALUES (10, 'Bebe');
+INSERT INTO AdminLogin(id, adminUser, pwd) VALUES (1, 'Miora', 'e251952a64f952d8920be4dd36f945b7');
+INSERT INTO Categorie(id, categorie) VALUES (default, 'Animalerie');
+INSERT INTO Categorie(id, categorie) VALUES (default, 'Art, Antiquite');
+INSERT INTO Categorie(id, categorie) VALUES (default, 'Bijoux, Montres');
+INSERT INTO Categorie(id, categorie) VALUES (default, 'Immobilier');
+INSERT INTO Categorie(id, categorie) VALUES (default, 'Bricolage');
+INSERT INTO Categorie(id, categorie) VALUES (default, 'Ceramique, Verre');
+INSERT INTO Categorie(id, categorie) VALUES (default, 'Instrument de musique');
+INSERT INTO Categorie(id, categorie) VALUES (default, 'Jeux video');
+INSERT INTO Categorie(id, categorie) VALUES (default, 'Jouet et jeux');
+INSERT INTO Categorie(id, categorie) VALUES (default, 'Bebe');
 INSERT INTO Produit(id, produit, categorie) VALUES (1, 'Chat', 1);
 INSERT INTO Produit(id, Produit, categorie) VALUES (2, 'Chien', 1);
 INSERT INTO Produit(id, Produit, categorie) VALUES (3, 'Apiculture', 1);
@@ -203,4 +203,70 @@ INSERT INTO CompteClient(id, montant, etat, Clientid,actionTransaction) VALUES (
 INSERT INTO CompteClient(id, montant, etat, Clientid,actionTransaction) VALUES (2, 100000, 0, 1,4);
 INSERT INTO CompteClient(id, montant, etat, Clientid,actionTransaction) VALUES (3, 20000, 1, 2,0);
 INSERT INTO Enchere(id, produit, libelle, dateHeure, prixMin, duree, etat,idclient) VALUES (1, 1, 'Bac a litiere', '2023-01-13 15:23:00', 10000, 1, '0',1);
-INSERT INTO Enchere(id, produit, libelle, dateHeure, prixMin, duree, etat,idclient) VALUES (2, 7, 'Violon', '2023-01-13 15:30:00', 5000, 4, '1',2);
+INSERT INTO Enchere(id, produit, libelle, dateHeure, prixMin, duree, etat,idclient) VALUES (2, 7, 'Violon', '2023-01-13 15:30:00', 5000, 4, '7',2);
+
+--------------------------------------------------------------------------------------------------------
+create table chiffreObtenuSite(
+    montant DOUBLE PRECISION,
+    dateObtention date
+);
+
+
+insert into chiffreObtenuSite VALUES
+(400000,'2022-07-06'),
+(600000,'2022-07-12'),
+(400000,'2022-09-23'),
+(400000,'2022-12-25');
+
+create table mois(
+    id int primary key,
+    mois varchar(30)
+);
+
+insert into mois VALUES
+(1,'Janvier'),
+(2,'Fevrier'),
+(3,'Mars'),
+(4,'Avril'),
+(5,'Mai'),
+(6,'Juin'),
+(7,'Juillet'),
+(8,'Aout'),
+(9,'Septembre'),
+(10,'Octobre'),
+(11,'Novembre'),
+(12,'Decembre');
+
+create or replace view v_produit as 
+select p.*, c.categorie as nomCategorie from produit p right join categorie c on p.categorie=c.id;
+
+create or replace view v_enchereCategorie as 
+select e.*, vp.categorie, vp.nomCategorie from enchere e right join v_produit vp on e.produit=vp.id;
+
+create or replace view v_statistiqueCategorie as 
+select count(ve.id) as nombre,ve.nomCategorie as categorie from v_enchereCategorie ve group by(ve.nomCategorie);
+
+create or replace view v_chiffreAffaireMois as 
+select sum(c.montant) as montant, (select extract(month from c.dateobtention)) as mois from chiffreobtenusite c 
+group by (select extract(month from c.dateobtention));
+
+create or replace view v_chiffreAffaire as 
+select case when v.montant is null then 0 
+else v.montant end as montant,
+case when m.mois='Janvier' then 1
+when m.mois='Fevrier' then 2
+when m.mois='Mars' then 3
+when m.mois='Avril' then 4
+when m.mois='Mai' then 5
+when m.mois='Juin' then 6
+when m.mois='Juillet' then 7
+when m.mois='Aout' then 8
+when m.mois='Septembre' then 9
+when m.mois='Octobre' then 10
+when m.mois='Novembre' then 11
+when m.mois='Decembre' then 12
+end as mois,
+m.mois as nomMois from v_chiffreAffaireMois v right join mois m on m.id=v.mois;
+
+create view v_compteClient as 
+select c.*, concat(cl.nom,cl.prenom) as nomClient, cl.contact from compteclient c join client cl on cl.id=c.clientid;

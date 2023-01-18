@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Liste des catégories
+                    <button type="button" class="btn btn-md btn-warning pull-right" data-toggle="modal" data-target="#exampleModal">Ajouter une nouvelle catégorie</button>
+                </div>
+                <div class="panel-body">
+                    <div class="canvas-wrapper">
+                        <table class="table">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col">Id</th>
+                                    <th scope="col">Catégorie</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="categorie:${categorie}">
+                                    <th scope="row" th:text="${categorie.id}"></th>
+                                    <td th:text="${categorie.categorie}">k</td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Nouvelle catégorie</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Nom</label>
+                        <input class="form-control" id="nomCategorie" placeholder="Nom de la nouvelle catégorie">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary pull-left" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success" onclick="ajouterNouvelleCategorie();">Ajouter</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
