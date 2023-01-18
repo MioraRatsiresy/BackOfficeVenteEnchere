@@ -98,17 +98,17 @@ from Enchere join Produit on Produit.id=Enchere.produit join Categorie on Catego
 -- ALTER TABLE CompteClient ADD CONSTRAINT FKCompteClie643909 FOREIGN KEY (Clientid) REFERENCES Client (id);
 -- ALTER TABLE Enchere ADD CONSTRAINT FKEnchere812038 FOREIGN KEY (SousCategorieid) REFERENCES SousCategorie (id);
 -- ALTER TABLE PhotoEnchere ADD CONSTRAINT FKPhotoEnche511259 FOREIGN KEY (Enchereid) REFERENCES Enchere (id);
-INSERT INTO AdminLogin(id, adminUser, pwd) VALUES (1, 'Miora', 'miora');
-INSERT INTO Categorie(id, categorie) VALUES (1, 'Animalerie');
-INSERT INTO Categorie(id, categorie) VALUES (2, 'Art, Antiquite');
-INSERT INTO Categorie(id, categorie) VALUES (3, 'Bijoux, Montres');
-INSERT INTO Categorie(id, categorie) VALUES (4, 'Immobilier');
-INSERT INTO Categorie(id, categorie) VALUES (5, 'Bricolage');
-INSERT INTO Categorie(id, categorie) VALUES (6, 'Ceramique, Verre');
-INSERT INTO Categorie(id, categorie) VALUES (7, 'Instrument de musique');
-INSERT INTO Categorie(id, categorie) VALUES (8, 'Jeux video');
-INSERT INTO Categorie(id, categorie) VALUES (9, 'Jouet et jeux');
-INSERT INTO Categorie(id, categorie) VALUES (10, 'Bebe');
+INSERT INTO AdminLogin(id, adminUser, pwd) VALUES (1, 'Miora', 'e251952a64f952d8920be4dd36f945b7');
+INSERT INTO Categorie(id, categorie) VALUES (default, 'Animalerie');
+INSERT INTO Categorie(id, categorie) VALUES (default, 'Art, Antiquite');
+INSERT INTO Categorie(id, categorie) VALUES (default, 'Bijoux, Montres');
+INSERT INTO Categorie(id, categorie) VALUES (default, 'Immobilier');
+INSERT INTO Categorie(id, categorie) VALUES (default, 'Bricolage');
+INSERT INTO Categorie(id, categorie) VALUES (default, 'Ceramique, Verre');
+INSERT INTO Categorie(id, categorie) VALUES (default, 'Instrument de musique');
+INSERT INTO Categorie(id, categorie) VALUES (default, 'Jeux video');
+INSERT INTO Categorie(id, categorie) VALUES (default, 'Jouet et jeux');
+INSERT INTO Categorie(id, categorie) VALUES (default, 'Bebe');
 INSERT INTO Produit(id, produit, categorie) VALUES (1, 'Chat', 1);
 INSERT INTO Produit(id, Produit, categorie) VALUES (2, 'Chien', 1);
 INSERT INTO Produit(id, Produit, categorie) VALUES (3, 'Apiculture', 1);
@@ -203,4 +203,10 @@ INSERT INTO CompteClient(id, montant, etat, Clientid,actionTransaction) VALUES (
 INSERT INTO CompteClient(id, montant, etat, Clientid,actionTransaction) VALUES (2, 100000, 0, 1,4);
 INSERT INTO CompteClient(id, montant, etat, Clientid,actionTransaction) VALUES (3, 20000, 1, 2,0);
 INSERT INTO Enchere(id, produit, libelle, dateHeure, prixMin, duree, etat,idclient) VALUES (1, 1, 'Bac a litiere', '2023-01-13 15:23:00', 10000, 1, '0',1);
-INSERT INTO Enchere(id, produit, libelle, dateHeure, prixMin, duree, etat,idclient) VALUES (2, 7, 'Violon', '2023-01-13 15:30:00', 5000, 4, '1',2);
+INSERT INTO Enchere(id, produit, libelle, dateHeure, prixMin, duree, etat,idclient) VALUES (2, 7, 'Violon', '2023-01-13 15:30:00', 5000, 4, '7',2);
+
+--------------------------------------------------------------------------------------------------------
+create table chiffreObtenuSite(
+    montant DOUBLE PRECISION,
+    dateObtention date
+);

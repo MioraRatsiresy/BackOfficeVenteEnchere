@@ -66,3 +66,22 @@ function ajouterNouvelleCategorie() {
     xmlhttp.open("POST", "http://localhost:4444/insertcategorie?categorie="+categorie);
     xmlhttp.send();
 }
+
+
+function logout() {
+    const xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            console.log(this.responseText);
+            retour = JSON.parse(this.responseText);
+            if (retour['message'] === "Logout with success") {
+                window.location.replace("/index");
+            }
+            else {
+            }
+        }
+    }
+    xmlhttp.open("GET", "http://localhost:4444/logout");
+    xmlhttp.send();
+}
+
