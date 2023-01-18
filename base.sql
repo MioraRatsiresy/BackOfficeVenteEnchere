@@ -210,3 +210,63 @@ create table chiffreObtenuSite(
     montant DOUBLE PRECISION,
     dateObtention date
 );
+
+
+insert into chiffreObtenuSite VALUES
+(400000,'2022-07-06'),
+(600000,'2022-07-12'),
+(400000,'2022-09-23'),
+(400000,'2022-12-25');
+
+create table mois(
+    id int primary key,
+    mois varchar(30)
+);
+
+insert into mois VALUES
+(1,'Janvier'),
+(2,'Fevrier'),
+(3,'Mars'),
+(4,'Avril'),
+(5,'Mai'),
+(6,'Juin'),
+(7,'Juillet'),
+(8,'Aout'),
+(9,'Septembre'),
+(10,'Octobre'),
+(11,'Novembre'),
+(12,'Decembre');
+
+create or replace view v_produit as 
+select p.*, c.categorie as nomCategorie from produit p right join categorie c on p.categorie=c.id;
+
+create or replace view v_enchereCategorie as 
+select e.*, vp.categorie, vp.nomCategorie from enchere e right join v_produit vp on e.produit=vp.id;
+
+create or replace view v_statistiqueCategorie as 
+select count(ve.id) as nombre,ve.nomCategorie as categorie from v_enchereCategorie ve group by(ve.nomCategorie);
+
+create or replace view v_chiffreAffaireMois as 
+select sum(c.montant) as montant, (select extract(month from c.dateobtention)) as mois from chiffreobtenusite c 
+group by (select extract(month from c.dateobtention));
+
+create or replace view v_chiffreAffaire as 
+select case when v.montant is null then 0 
+else v.montant end as montant,
+case when m.mois='Janvier' then 1
+when m.mois='Fevrier' then 2
+when m.mois='Mars' then 3
+when m.mois='Avril' then 4
+when m.mois='Mai' then 5
+when m.mois='Juin' then 6
+when m.mois='Juillet' then 7
+when m.mois='Aout' then 8
+when m.mois='Septembre' then 9
+when m.mois='Octobre' then 10
+when m.mois='Novembre' then 11
+when m.mois='Decembre' then 12
+end as mois,
+m.mois as nomMois from v_chiffreAffaireMois v right join mois m on m.id=v.mois;
+
+create view v_compteClient as 
+select c.*, concat(cl.nom,cl.prenom) as nomClient, cl.contact from compteclient c join client cl on cl.id=c.clientid;
