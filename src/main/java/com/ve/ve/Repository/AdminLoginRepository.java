@@ -42,13 +42,14 @@ public class AdminLoginRepository implements AdminLoginDAO{
     @Override
     public void validerRechargementCompte(int id, int action) {
         String sql="update compteclient set etat="+action+" where id="+id;
+        System.out.println(sql);
         jdbcTemplate.update(sql);
         
     }
 
     @Override
     public ArrayList<CompteClient> getListeDemande() {
-        String sql = "select * from compteclient where etat=0";
+        String sql = "select compteclient.*,client.nom,client.prenom from compteclient join client on client.id=compteclient.clientid where etat=0 and actiontransaction=4";
         return (ArrayList<CompteClient>) jdbcTemplate.query(sql,new BeanPropertyRowMapper<CompteClient>(CompteClient.class));
 
     }

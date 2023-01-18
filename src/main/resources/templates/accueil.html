@@ -125,7 +125,7 @@
         </form>
         <ul class="nav menu">
             <li class="active">
-                <a href="index.html">
+                <a onclick="viewStatistique();">
                     <em class="fa fa-bar-chart">&nbsp;</em> Statistique</a>
             </li>
             <li>
@@ -141,7 +141,7 @@
                     <em class="fa fa-wrench">&nbsp;</em> Paramètre durée enchère</a>
             </li>
             <li>
-                <a href="panels.html">
+                <a href="#" onclick="listeDemande();">
                     <em class="fa fa-check">&nbsp;</em> Validation compte</a>
             </li>
             <li>
@@ -154,7 +154,13 @@
 
     <div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
 
-        <div id="categorie"></div>
+        <div id="contenu">
+
+        </div>
+        <br>
+        <div id="contenu1">
+
+        </div>
         <!--/.row-->
 
 
@@ -173,14 +179,14 @@
 
     <script src="assetsTemplate/js/jquery-1.11.1.min.js"></script>
     <script src="assetsTemplate/js/bootstrap.min.js"></script>
-    <script src="assetsTemplate/js/chart.min.js"></script>
-    <script src="assetsTemplate/js/chart-data.js"></script>
+    
+    <script src="js/highcharts.js"></script>
     <script src="assetsTemplate/js/easypiechart.js"></script>
     <script src="assetsTemplate/js/easypiechart-data.js"></script>
     <script src="assetsTemplate/js/bootstrap-datepicker.js"></script>
     <script src="assetsTemplate/js/custom.js"></script>
     <script src="mesJs/enchere.js"></script>
-
+    <script src="js/index.js"></script>
 
 </body>
 

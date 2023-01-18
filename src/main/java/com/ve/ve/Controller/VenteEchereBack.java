@@ -12,14 +12,21 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.ve.ve.Model.AdminLogin;
 import com.ve.ve.Model.Categorie;
+import com.ve.ve.Model.StatistiqueCategorie;
+import com.ve.ve.Model.StatistiqueChiffreAffaire;
 import com.ve.ve.Repository.AdminLoginRepository;
 import com.ve.ve.Repository.CategorieRepository;
+import com.ve.ve.Repository.StatistiqueCategorieRepository;
+import com.ve.ve.Repository.StatistiqueChiffreAffaireRepository;
 
 @Controller
 public class VenteEchereBack {
@@ -28,6 +35,12 @@ public class VenteEchereBack {
 
     @Autowired
     private CategorieRepository categorie;
+
+    @Autowired
+    private StatistiqueCategorieRepository statistiqueCategorie;
+
+    @Autowired
+    private StatistiqueChiffreAffaireRepository statistiqueChiffreAffaire;
 
     /* LOGIN */
     @RequestMapping(value = "/login/traitement", method = RequestMethod.POST, produces = "application/json")
@@ -176,7 +189,21 @@ public class VenteEchereBack {
         return jsonObject.toString();
     }
 
+    /*MIORA */
+    @GetMapping("/validationCompte")
+   // @ResponseBody
+    public String validationCompte(Model model){
+        model.addAttribute("demande",user.getListeDemande());
+        return "rechargementCompte";
+    }
 
+    @GetMapping("/validerdemande/{id}/{etat}")
+     public Map<String, Object> validerdemande(@PathVariable int id ,@PathVariable int etat){
+        Map<String, Object> map = new HashMap<>();
+        user.validerRechargementCompte(id, etat);
+        map.put("Status","Success");
+        return map;
+     }
 
 
 }
