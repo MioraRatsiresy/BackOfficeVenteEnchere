@@ -10,14 +10,18 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ve.ve.Model.Enchere;
+import com.ve.ve.Gestiontoken.GestionToken;
 import com.ve.ve.Model.Client;
 import com.ve.ve.Repository.ClientRepository;
 import com.ve.ve.Repository.EnchereRepository;
+
+import io.jsonwebtoken.Claims;
 
 @Controller
 public class VenteEnchereFront {
@@ -42,17 +46,30 @@ public class VenteEnchereFront {
     @CrossOrigin
     public Map<String, Object> rechercheAvance(HttpServletRequest request) {
         Map<String, Object> map = new HashMap<>();
-        map.put("enchere", enchereRepository.searchEnchere(request.getParameter("search")));
+        GestionToken tok = new GestionToken();
+        try {
+            Claims cl = tok.testTokenClaims(request);
+            map.put("enchere", enchereRepository.searchEnchere(request.getParameter("search")));
+        }
+        catch(Exception e){
+            map.put("Erreur", e.getMessage());
+        }
         return map;
     }
 
-    @RequestMapping(value = "/getMesEncheres", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "/getMesEncheres/{id}", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
     @CrossOrigin
-    public Map<String, Object> getMesEncheres(HttpServletRequest request) {
+    public Map<String, Object> getMesEncheres(HttpServletRequest request,@PathVariable int id) {
         Map<String, Object> map = new HashMap<>();
-        HttpSession session = request.getSession();
-        map.put("enchere", enchereRepository.getMesEncheres(Integer.parseInt(request.getParameter("id"))));
+        GestionToken tok = new GestionToken();
+        try {
+            Claims cl = tok.testTokenClaims(request);
+             map.put("enchere", enchereRepository.getMesEncheres(id));
+        }
+        catch(Exception e){
+            map.put("Erreur",e.getMessage());
+        }
         return map;
     }
 
@@ -60,6 +77,7 @@ public class VenteEnchereFront {
     @ResponseBody
     @CrossOrigin
     public void insertEnchere(HttpServletRequest request) {
+        Map<String, Object> map = new HashMap<>();
         Enchere enchere = new Enchere();
         enchere.setProduit(Integer.parseInt(request.getParameter("produit")));
         enchere.setLibelle(request.getParameter("libelle"));
@@ -67,7 +85,15 @@ public class VenteEnchereFront {
         enchere.setDuree(Double.parseDouble(request.getParameter("duree")));
         enchere.setIdclient(Integer.parseInt(request.getParameter("idClient")));
         enchere.setEtat("0");
-        enchereRepository.insertEnchere(enchere);
+        GestionToken tok = new GestionToken();
+        try {
+            Claims cl = tok.testTokenClaims(request);
+            enchereRepository.insertEnchere(enchere);
+            map.put("response","Insertion avec succes");
+        }
+        catch(Exception e){ 
+            map.put("Erreur",e.getMessage());
+        }
     }
 
     @RequestMapping(value = "/incriptionClient", method = RequestMethod.POST, produces = "application/json")
@@ -103,6 +129,9 @@ public class VenteEnchereFront {
             HttpSession session = request.getSession();
             map.put("iduser", resultat.get(0).getId());
             session.setAttribute("idClient", resultat.get(0).getId());
+            GestionToken tok=new GestionToken();
+            map.put("token",tok.generateToken(resultat.get(0)));
+            map.put("date d'expiration",tok.expirationdateToken(tok.generateToken(resultat.get(0))).toString());
             retour = "Login correcte";
             status = "succes";
         } else {
@@ -113,4 +142,16 @@ public class VenteEnchereFront {
         map.put("status", status);
         return map;
     }
+    @RequestMapping(value = "/deconnexion" , method = RequestMethod.GET,produces="application/json")
+	@ResponseBody
+    @CrossOrigin
+    public Map<String,String> deconnexion(HttpServletRequest request){
+        HttpSession session = request.getSession();
+        session.invalidate();
+        Map<String,String> map=new HashMap<>();
+        map.put("message","Logout with success");
+        map.put("status","200");
+        return map;
+    }
+
 }

@@ -5,6 +5,7 @@ import java.util.Date;
 import javax.servlet.http.HttpServletRequest;
 
 import com.ve.ve.Model.AdminLogin;
+import com.ve.ve.Model.Client;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -13,7 +14,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 public class GestionToken {
   private String secretcode = "miora";
 
-  public String generateToken(AdminLogin admin) {
+  public String generateToken(Client admin) {
     String jwtToken = null;
     jwtToken = Jwts.builder().signWith(SignatureAlgorithm.HS256, secretcode)
         .setIssuedAt(new Date(System.currentTimeMillis()))
@@ -26,7 +27,7 @@ public class GestionToken {
         .parseClaimsJws(token).getBody().getExpiration();
   }
 
-  public Claims testTokenClaims(String token,HttpServletRequest request) throws Exception {
+  public Claims testTokenClaims(HttpServletRequest request) throws Exception {
     final String authorizationHeaderValue = request.getHeader("Authorization");
     String[] tokenParse = authorizationHeaderValue.split("Bearer ");
     Claims cl = null;
