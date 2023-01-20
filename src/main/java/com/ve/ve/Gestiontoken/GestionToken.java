@@ -2,6 +2,8 @@ package com.ve.ve.Gestiontoken;
 
 import java.util.Date;
 
+import javax.servlet.http.HttpServletRequest;
+
 import com.ve.ve.Model.AdminLogin;
 
 import io.jsonwebtoken.Claims;
@@ -24,14 +26,14 @@ public class GestionToken {
         .parseClaimsJws(token).getBody().getExpiration();
   }
 
-  public Claims testTokenClaims(String token) throws Exception {
-    //final String authorizationHeaderValue = request.getHeader("Authorization");
-    //String[] tokenParse = authorizationHeaderValue.split("Bearer ");
+  public Claims testTokenClaims(String token,HttpServletRequest request) throws Exception {
+    final String authorizationHeaderValue = request.getHeader("Authorization");
+    String[] tokenParse = authorizationHeaderValue.split("Bearer ");
     Claims cl = null;
-    if (token != null) {
+    if (tokenParse.length>1 && tokenParse[1]!= null) {
       try {
         cl = Jwts.parser().setSigningKey(secretcode)
-            .parseClaimsJws(token).getBody();
+            .parseClaimsJws(tokenParse[1]).getBody();
       } catch (Exception e) {
         throw new Exception("Token Expired");
       }
