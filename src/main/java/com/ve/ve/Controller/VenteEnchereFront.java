@@ -73,17 +73,17 @@ public class VenteEnchereFront {
         return map;
     }
 
-    @RequestMapping(value = "/insertEnchere", method = RequestMethod.POST, produces = "application/json")
+    @RequestMapping(value = "/insertEnchere/{id}", method = RequestMethod.POST, produces = "application/json")
     @ResponseBody
     @CrossOrigin
-    public void insertEnchere(HttpServletRequest request) {
+    public void insertEnchere(HttpServletRequest request,@PathVariable int id) {
         Map<String, Object> map = new HashMap<>();
         Enchere enchere = new Enchere();
         enchere.setProduit(Integer.parseInt(request.getParameter("produit")));
         enchere.setLibelle(request.getParameter("libelle"));
         enchere.setPrixMin(Double.parseDouble(request.getParameter("prixMin")));
         enchere.setDuree(Double.parseDouble(request.getParameter("duree")));
-        enchere.setIdclient(Integer.parseInt(request.getParameter("idClient")));
+        enchere.setIdclient(id);
         enchere.setEtat("0");
         GestionToken tok = new GestionToken();
         try {

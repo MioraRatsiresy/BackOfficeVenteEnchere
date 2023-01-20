@@ -1,6 +1,8 @@
 package com.ve.ve.Controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -72,6 +74,12 @@ public class MongoController {
         return map;
     }
 
+    @RequestMapping(value = "/liste", method = RequestMethod.GET,produces = "application/json")
+    @ResponseBody
+    @CrossOrigin
+    public List<PhotoEnchere> liste() {
+       return photo.findAll();
+    }
 
  
 

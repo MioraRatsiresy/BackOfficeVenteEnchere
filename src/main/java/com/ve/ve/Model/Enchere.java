@@ -57,4 +57,11 @@ public class Enchere {
     public void setIdclient(int idclient) {
         this.idclient = idclient;
     }
+    private String datefin;
+    public String getDatefin() {
+        return datefin;
+    }
+    public void setDatefin(String datefin) {
+        this.datefin = datefin;
+    }
 }

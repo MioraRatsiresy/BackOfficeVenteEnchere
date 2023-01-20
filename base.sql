@@ -67,7 +67,8 @@ CREATE TABLE CompteClient (
     montant float8 NOT NULL,
     etat int4 default 0 NOT NULL, --0 en cours //3 validé // 8 refusé
     Clientid int4 NOT NULL, 
-    actionTransaction int default 0 --0 debit --4 credit
+    actionTransaction int default 0, --0 debit --4 credit
+    PRIMARY KEY(id)
 );
 
 ALTER TABLE CompteClient ADD FOREIGN KEY(Clientid) REFERENCES Client(id);
@@ -203,7 +204,7 @@ INSERT INTO CompteClient(montant, etat, Clientid,actionTransaction) VALUES (1000
 INSERT INTO CompteClient(montant, etat, Clientid,actionTransaction) VALUES (20000, 1, 2,0);
 INSERT INTO Enchere( produit, libelle, dateHeure, prixMin, duree, etat,idclient) VALUES ( 1, 'Bac a litiere', '2023-01-13 15:23:00', 10000, 1, '0',1);
 INSERT INTO Enchere( produit, libelle, dateHeure, prixMin, duree, etat,idclient) VALUES ( 7, 'Violon', '2023-01-13 15:30:00', 5000, 4, '7',2);
-
+INSERT INTO Enchere( produit, libelle, dateHeure, prixMin, duree, etat,idclient) VALUES ( 32, 'Lego', '2023-01-20 17:30:00', 25000, 10, '0',2);
 --------------------------------------------------------------------------------------------------------
 create table chiffreObtenuSite(
     montant DOUBLE PRECISION,
@@ -267,5 +268,6 @@ when m.mois='Decembre' then 12
 end as mois,
 m.mois as nomMois from v_chiffreAffaireMois v right join mois m on m.id=v.mois;
 
-create view v_compteClient as 
-select c.*, concat(cl.nom,cl.prenom) as nomClient, cl.contact from compteclient c join client cl on cl.id=c.clientid;
+create or replace view v_enchereEnCours as 
+select*, dateheure+interval '1 day'*duree as datefin from encheredetail where current_timestamp<=dateheure+interval '1 day'*duree and etat='0';
+
