@@ -159,7 +159,7 @@ public class VenteEchereBack {
         return "statistique";
     }
 
-    @RequestMapping("/piechartdata")
+    @RequestMapping("/statistique")
     @ResponseBody
     // public ResponseEntity<?> getDataForPiechart(){
     public String getDataForPiechart() {
@@ -211,7 +211,7 @@ public class VenteEchereBack {
         return "rechargementCompte";
     }
 
-    @GetMapping("/validerdemande/{id}/{etat}")
+    @PutMapping("/validerdemande/{id}/{etat}")
     @ResponseBody
     public Map<String, Object> validerdemande(@PathVariable int id, @PathVariable int etat) {
         Map<String, Object> map = new HashMap<>();

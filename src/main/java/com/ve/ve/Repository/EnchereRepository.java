@@ -24,7 +24,7 @@ public class EnchereRepository implements EnchereDAO{
 
     @Override
     public ArrayList<Enchere> searchEnchere(String search) {
-        String sql = "SELECT * from EnchereDetail where dateheure like '%"+search+"%' or lower(cartegorie) like '%"+search+"%' or lower(prixMin::varchar) like '%"+search+"%' or lower(etat) like '%"+search+"%'";
+        String sql = "SELECT * from EnchereDetail where (dateheure::varchar) like '%"+search+"%' or lower(categorie) like '%"+search+"%' or lower(prixMin::varchar) like '%"+search+"%' or lower(etat) like '%"+search+"%'";
         return  (ArrayList<Enchere>) jdbcTemplate.query(sql,new BeanPropertyRowMapper<Enchere>(Enchere.class));
     }
 
@@ -36,7 +36,7 @@ public class EnchereRepository implements EnchereDAO{
 
     @Override
     public void insertEnchere(Enchere enchere) {
-        String sql="INSERT INTO enchere values (default,'"+enchere.getProduit()+"','"+enchere.getLibelle()+"','"+enchere.getPrixMin()+"','"+enchere.getDuree()+"','"+enchere.getEtat()+"','"+enchere.getIdclient()+"')";
+        String sql="INSERT INTO enchere values (default,'"+enchere.getProduit()+"','"+enchere.getLibelle()+"',current_timestamp,'"+enchere.getPrixMin()+"','"+enchere.getDuree()+"','"+enchere.getEtat()+"','"+enchere.getIdclient()+"')";
         jdbcTemplate.update(sql);
         
     }

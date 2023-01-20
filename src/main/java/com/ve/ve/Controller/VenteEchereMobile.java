@@ -1,9 +1,20 @@
 package com.ve.ve.Controller;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.ve.ve.Model.CompteClient;
+import com.ve.ve.Model.Enchere;
 import com.ve.ve.Repository.AdminLoginRepository;
 import com.ve.ve.Repository.CategorieRepository;
+import com.ve.ve.Repository.ClientRepository;
 
 @Controller
 public class VenteEchereMobile {
@@ -12,6 +23,9 @@ public class VenteEchereMobile {
 
     @Autowired 
     private CategorieRepository categorie;
+
+    @Autowired
+    private ClientRepository client;
 
     // @PostMapping("/token")
     // public String sendPnsToDevice(HttpServletRequest request) {
@@ -38,7 +52,17 @@ public class VenteEchereMobile {
 
     //     return response;
     // }
-    
+    @RequestMapping(value = "/rechargermoncompte/{id}", method = RequestMethod.POST, produces = "application/json")
+    @ResponseBody
+    @CrossOrigin
+    public void insertEnchere(HttpServletRequest request,@PathVariable int id) {
+        CompteClient compte=new CompteClient();
+        compte.setClientid(id);
+        compte.setMontant(Double.parseDouble(request.getParameter("montant")));
+        compte.setEtat(0);
+        compte.setActionTransaction(4);
+        client.rechargerMonCompte(compte);
+    }
 
  
 

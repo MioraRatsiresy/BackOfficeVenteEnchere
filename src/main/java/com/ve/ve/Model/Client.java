@@ -8,11 +8,11 @@ public class Client {
     public void setId(int id) {
         this.id = id;
     }
-    private int nom;
-    public int getNom() {
+    private String nom;
+    public String getNom() {
         return nom;
     }
-    public void setNom(int nom) {
+    public void setNom(String nom) {
         this.nom = nom;
     }
     private String prenom;

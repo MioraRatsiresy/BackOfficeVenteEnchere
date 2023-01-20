@@ -149,7 +149,6 @@ INSERT INTO Produit(id, Produit, categorie) VALUES (default, 'Peluche doudous', 
 INSERT INTO Produit(id, Produit, categorie) VALUES (default, 'Equipements pour bebe', 10);
 INSERT INTO Produit(id, Produit, categorie) VALUES (default, 'Equipements de securite', 10);
 INSERT INTO Produit(id, Produit, categorie) VALUES (default, 'Autres', 10);
-INSERT INTO EnchereAdmin(id, Categorieid, duree) VALUES (default, 1, 2);
 INSERT INTO EnchereAdmin(id, Categorieid, duree) VALUES (default, 2, 3);
 INSERT INTO EnchereAdmin(id, Categorieid, duree) VALUES (default, 3, 1);
 INSERT INTO EnchereAdmin(id, Categorieid, duree) VALUES (default, 4, 4);

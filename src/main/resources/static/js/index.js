@@ -115,7 +115,7 @@ function viewStatistique() {
 			drawLineChart(category, series);
 		}
 	}
-	xmlhttp.open("GET", "http://localhost:4444/piechartdata");
+	xmlhttp.open("GET", "http://localhost:4444/statistique");
 	xmlhttp.send();
 }
 

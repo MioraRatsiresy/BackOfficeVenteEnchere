@@ -109,7 +109,7 @@ function validation(id, etat) {
             listeDemande();
         }
     }
-    xmlhttp.open("GET", "http://localhost:4444/validerdemande/" + id + "/" + etat);
+    xmlhttp.open("PUT", "http://localhost:4444/validerdemande/" + id + "/" + etat);
     xmlhttp.send();
 }
 function commission() {
