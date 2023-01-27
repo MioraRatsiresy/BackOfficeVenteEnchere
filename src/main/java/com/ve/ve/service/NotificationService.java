@@ -24,7 +24,7 @@ public class NotificationService {
 
     private FirebaseApp firebaseApp;
 
-    @PostConstruct
+    /*@PostConstruct
     private void initialize() {
         try {
             FirebaseOptions options = new FirebaseOptions.Builder()
@@ -92,5 +92,5 @@ public class NotificationService {
         }
 
         return response;
-    }
+    }*/
 }

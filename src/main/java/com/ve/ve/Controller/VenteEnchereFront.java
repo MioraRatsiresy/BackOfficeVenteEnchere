@@ -41,42 +41,40 @@ public class VenteEnchereFront {
         return map;
     }
 
-    @RequestMapping(value = "/rechercheAvanceFront", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "/rechercheAvanceFront/{token}", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
     @CrossOrigin
-    public Map<String, Object> rechercheAvance(HttpServletRequest request) {
+    public Map<String, Object> rechercheAvance(HttpServletRequest request, , @PathVariable String token) {
         Map<String, Object> map = new HashMap<>();
         GestionToken tok = new GestionToken();
         try {
             Claims cl = tok.testTokenClaims(request);
             map.put("enchere", enchereRepository.searchEnchere(request.getParameter("search")));
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             map.put("Erreur", e.getMessage());
         }
         return map;
     }
 
-    @RequestMapping(value = "/getMesEncheres/{id}", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "/getMesEncheres/{id}/{token}", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
     @CrossOrigin
-    public Map<String, Object> getMesEncheres(HttpServletRequest request,@PathVariable int id) {
+    public Map<String, Object> getMesEncheres(HttpServletRequest request, @PathVariable int id,, @PathVariable String token) {
         Map<String, Object> map = new HashMap<>();
         GestionToken tok = new GestionToken();
         try {
             Claims cl = tok.testTokenClaims(request);
-             map.put("enchere", enchereRepository.getMesEncheres(id));
-        }
-        catch(Exception e){
-            map.put("Erreur",e.getMessage());
+            map.put("enchere", enchereRepository.getMesEncheres(id));
+        } catch (Exception e) {
+            map.put("Erreur", e.getMessage());
         }
         return map;
     }
 
-    @RequestMapping(value = "/insertEnchere/{id}", method = RequestMethod.POST, produces = "application/json")
+    @RequestMapping(value = "/insertEnchere/{id}/{token}", method = RequestMethod.POST, produces = "application/json")
     @ResponseBody
     @CrossOrigin
-    public void insertEnchere(HttpServletRequest request,@PathVariable int id) {
+    public void insertEnchere(HttpServletRequest request, @PathVariable int id, @PathVariable String token) {
         Map<String, Object> map = new HashMap<>();
         Enchere enchere = new Enchere();
         enchere.setProduit(Integer.parseInt(request.getParameter("produit")));
@@ -87,16 +85,15 @@ public class VenteEnchereFront {
         enchere.setEtat("0");
         GestionToken tok = new GestionToken();
         try {
-            Claims cl = tok.testTokenClaims(request);
+            Claims cl = tok.testTokenClaims(token);
             enchereRepository.insertEnchere(enchere);
-            map.put("response","Insertion avec succes");
-        }
-        catch(Exception e){ 
-            map.put("Erreur",e.getMessage());
+            map.put("response", "Insertion avec succes");
+        } catch (Exception e) {
+            map.put("Erreur", e.getMessage());
         }
     }
 
-    @RequestMapping(value = "/incriptionClient", method = RequestMethod.POST, produces = "application/json")
+    @RequestMapping(value = "/inscriptionClient", method = RequestMethod.POST, produces = "application/json")
     @ResponseBody
     @CrossOrigin
     public Map<String, Object> inscriptionClient(HttpServletRequest request) {
@@ -108,6 +105,11 @@ public class VenteEnchereFront {
         client.setIdentifiant(request.getParameter("identifiant"));
         client.setPwd(request.getParameter("pwd"));
         clientRepository.inscriptionClient(client);
+        GestionToken tok = new GestionToken();
+        ArrayList<Client> resultat = clientRepository.verifyLogin(request.getParameter("identifiant"), request.getParameter("pwd"));
+        map.put("iduser", resultat.get(0).getId());
+        map.put("token", tok.generateToken(resultat.get(0)));
+        map.put("date d'expiration", tok.expirationdateToken(tok.generateToken(resultat.get(0))).toString());
         map.put("message", "Insertion effectuée avec succès");
         map.put("status", "Succès");
         return map;
@@ -129,9 +131,9 @@ public class VenteEnchereFront {
             HttpSession session = request.getSession();
             map.put("iduser", resultat.get(0).getId());
             session.setAttribute("idClient", resultat.get(0).getId());
-            GestionToken tok=new GestionToken();
-            map.put("token",tok.generateToken(resultat.get(0)));
-            map.put("date d'expiration",tok.expirationdateToken(tok.generateToken(resultat.get(0))).toString());
+            GestionToken tok = new GestionToken();
+            map.put("token", tok.generateToken(resultat.get(0)));
+            map.put("date d'expiration", tok.expirationdateToken(tok.generateToken(resultat.get(0))).toString());
             retour = "Login correcte";
             status = "succes";
         } else {
@@ -142,15 +144,16 @@ public class VenteEnchereFront {
         map.put("status", status);
         return map;
     }
-    @RequestMapping(value = "/deconnexion" , method = RequestMethod.GET,produces="application/json")
-	@ResponseBody
+
+    @RequestMapping(value = "/deconnexion", method = RequestMethod.GET, produces = "application/json")
+    @ResponseBody
     @CrossOrigin
-    public Map<String,String> deconnexion(HttpServletRequest request){
+    public Map<String, String> deconnexion(HttpServletRequest request) {
         HttpSession session = request.getSession();
         session.invalidate();
-        Map<String,String> map=new HashMap<>();
-        map.put("message","Logout with success");
-        map.put("status","200");
+        Map<String, String> map = new HashMap<>();
+        map.put("message", "Logout with success");
+        map.put("status", "200");
         return map;
     }
 

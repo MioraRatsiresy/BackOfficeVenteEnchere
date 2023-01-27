@@ -58,10 +58,10 @@ public class VenteEchereMobile {
 
     //     return response;
     // }
-    @RequestMapping(value = "/rechargermoncompte/{id}", method = RequestMethod.POST, produces = "application/json")
+    @RequestMapping(value = "/rechargermoncompte/{id}/{token}", method = RequestMethod.POST, produces = "application/json")
     @ResponseBody
     @CrossOrigin
-    public void insertEnchere(HttpServletRequest request,@PathVariable int id) {
+    public void insertEnchere(HttpServletRequest request,@PathVariable int id, @PathVariable String token) {
         Map<String,Object> map=new HashMap<>();
         CompteClient compte=new CompteClient();
         compte.setClientid(id);
@@ -69,13 +69,14 @@ public class VenteEchereMobile {
         compte.setEtat(0);
         compte.setActionTransaction(4);
         GestionToken tok = new GestionToken();
+        System.out.println("TOKEN : "+token);
         try {
-            Claims cl = tok.testTokenClaims(request);
+            Claims cl = tok.testTokenClaims(token);
             client.rechargerMonCompte(compte);
             map.put("Status","Rechargment du compte avec succes");
         }
         catch(Exception e){
-            map.put("Erreur",e.getMessage());
+            map.put("Erreur","Erreur");
         }
     }
 

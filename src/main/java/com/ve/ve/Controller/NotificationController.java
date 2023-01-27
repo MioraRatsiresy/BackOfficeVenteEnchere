@@ -18,7 +18,7 @@ public class NotificationController {
     @Autowired
     private NotificationService notificationService;
 
-    @PostMapping("/subscribe")
+    /*@PostMapping("/subscribe")
     public void subscribeToTopic(@RequestBody SubscriptionRequestDto subscriptionRequestDto) {
         notificationService.subscribeToTopic(subscriptionRequestDto);
     }
@@ -36,5 +36,5 @@ public class NotificationController {
     @PostMapping("/topic")
     public String sendPnsToTopic(@RequestBody NotificationRequestDto notificationRequestDto) {
         return notificationService.sendPnsToTopic(notificationRequestDto);
-    }
+    }*/
 }
