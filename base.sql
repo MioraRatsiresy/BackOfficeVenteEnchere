@@ -269,7 +269,54 @@ end as mois,
 m.mois as nomMois from v_chiffreAffaireMois v right join mois m on m.id=v.mois;
 
 create or replace view v_enchereEnCours as 
-select*, dateheure+interval '1 day'*duree as datefin from encheredetail where current_timestamp<=dateheure+interval '1 day'*duree and etat='0';
+select*, dateheure+interval '1 day'*duree as datefin from encheredetail where dateheure<=current_timestamp and current_timestamp<=dateheure+interval '1 day'*duree and etat='0';
 
-create or replace view statutEnchere as 
-select ed.*, case when etat='0' then 'En cours' when etat='7' then 'Termin&eacute;' end as statut from encheredetail ed;
+create or replace view v_statutEnchere as 
+select ed.*, 
+dateheure+interval '1 day'*duree as datefin,
+case when etat='0' then 'En cours' when etat='7' then 'Termin&eacute;' end as statut 
+from encheredetail ed;
+
+CREATE or replace FUNCTION getInfoEnchere() RETURNS 
+table(
+    idEnchere int,
+    produit int,
+    libelle text,
+    dateHeure TIMESTAMP,
+    prixMin DOUBLE PRECISION,
+    duree DOUBLE PRECISION,
+    etat VARCHAR(10),
+    idClient int,
+    produitEnchere VARCHAR(50),
+    categorie VARCHAR(50),
+    dateFin TIMESTAMP,
+    statut VARCHAR(20)
+) language plpgsql AS $$
+DECLARE 
+    statutEnchere record;
+    tab record;
+    id int;
+BEGIN 
+    for statutEnchere in (select*from v_statutenchere)
+    LOOP
+        IF statutEnchere.dateHeure<=current_timestamp and current_timestamp<=statutEnchere.dateFin then
+            statut:='En cours';
+        ELSE 
+            EXECUTE format('UPDATE enchere SET etat = 7 WHERE dateheure<=current_timestamp and current_timestamp<=dateheure+interval ''1 day''*duree');
+            statut:='Termine';
+        END IF;
+        idEnchere:=statutEnchere.id;
+        produit:=statutEnchere.produit;
+        libelle:=statutEnchere.libelle;
+        dateHeure:=statutEnchere.dateHeure;
+        prixMin:=statutEnchere.prixMin;
+        duree:=statutEnchere.duree;
+        etat:=statutEnchere.etat;
+        idClient:=statutEnchere.idClient;
+        produitEnchere:=statutEnchere.produitEnchere;
+        categorie:=statutEnchere.categorie;
+        dateFin:=statutEnchere.dateFin;
+        return next;
+    END LOOP;    
+END;
+$$;
