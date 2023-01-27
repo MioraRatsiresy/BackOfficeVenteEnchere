@@ -73,7 +73,8 @@ public class VenteEchereMobile {
         try {
             Claims cl = tok.testTokenClaims(token);
             client.rechargerMonCompte(compte);
-            map.put("Status","Rechargment du compte avec succes");
+            map.put("message","Rechargment du compte avec succes");
+            map.put("Status","Succes");
         }
         catch(Exception e){
             map.put("Erreur","Erreur");

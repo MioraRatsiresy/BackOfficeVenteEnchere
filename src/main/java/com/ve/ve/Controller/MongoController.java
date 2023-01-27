@@ -32,17 +32,17 @@ public class MongoController {
     @Autowired
     private MiserEnchereRepository miser;
     
-    @RequestMapping(value = "/insertPhoto/{id}", method = RequestMethod.POST,produces = "application/json")
+    @RequestMapping(value = "/insertPhoto/{id}/{token}", method = RequestMethod.POST,produces = "application/json")
     @ResponseBody
     @CrossOrigin
-    public Map<String,Object> insertPhoto(@PathVariable int id,HttpServletRequest request) {
+    public Map<String,Object> insertPhoto(@PathVariable int id,HttpServletRequest request, @PathVariable String token) {
         Map<String,Object> map=new HashMap<>();
         PhotoEnchere photoenchere=new PhotoEnchere();
         photoenchere.setIdEnchere(id);
         photoenchere.setPhoto(request.getParameter("photo"));
         GestionToken tok = new GestionToken();
         try {
-            Claims cl = tok.testTokenClaims(request);
+            Claims cl = tok.testTokenClaims(token);
             photo.save(photoenchere);
             map.put("Status","Insertion avec succes");
         }
@@ -52,10 +52,10 @@ public class MongoController {
         return map;
     }
 
-    @RequestMapping(value = "/miser/{id}", method = RequestMethod.POST,produces = "application/json")
+    @RequestMapping(value = "/miser/{id}/{token}", method = RequestMethod.POST,produces = "application/json")
     @ResponseBody
     @CrossOrigin
-    public Map<String,Object> miser(@PathVariable int id,HttpServletRequest request) {
+    public Map<String,Object> miser(@PathVariable int id,HttpServletRequest request, @PathVariable String token) {
         Map<String,Object> map=new HashMap<>();
         MiserEnchere me=new MiserEnchere();
         me.setIdEnchere(id);
@@ -64,7 +64,7 @@ public class MongoController {
         me.setDateheure(request.getParameter("dateheure"));
         GestionToken tok = new GestionToken();
         try {
-            Claims cl = tok.testTokenClaims(request);
+            Claims cl = tok.testTokenClaims(token);
             miser.save(me);
             map.put("Status","Insertion avec succes");
         }

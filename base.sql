@@ -271,3 +271,5 @@ m.mois as nomMois from v_chiffreAffaireMois v right join mois m on m.id=v.mois;
 create or replace view v_enchereEnCours as 
 select*, dateheure+interval '1 day'*duree as datefin from encheredetail where current_timestamp<=dateheure+interval '1 day'*duree and etat='0';
 
+create or replace view statutEnchere as 
+select ed.*, case when etat='0' then 'En cours' when etat='7' then 'Termin&eacute;' end as statut from encheredetail ed;
