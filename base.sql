@@ -97,11 +97,18 @@ CREATE TABLE MiserEnchere (
     FOREIGN KEY(idclient) REFERENCES Client(id),
     FOREIGN KEY(idEnchere) REFERENCES Enchere(id)
 );
-INSERT INTO MiserENchere VALUES (1,1,20000,'2023-01-13 16:30');
-INSERT INTO MiserENchere VALUES (2,1,50000,'2023-01-13 16:35');
-INSERT INTO MiserENchere(idEnchere,idClient,montant) VALUES (3,1,30000);
 
 
+create table enchereplafond(
+    idClient int,
+    idEnchere int,
+    montant int,
+    intervalle double precision,
+    FOREIGN KEY(idClient) REFERENCES Client(id),
+    FOREIGN KEY(idEnchere) REFERENCES Enchere(id)
+);
+
+INSERT INTO enchereplafond VALUES (1,3,100000,50);
 -- ALTER TABLE EnchereAdmin ADD CONSTRAINT FKEnchereAdm945139 FOREIGN KEY (Categorieid) REFERENCES Categorie (id);
 -- ALTER TABLE EtatCategorie ADD CONSTRAINT FKEtatCatego274392 FOREIGN KEY (Categorieid) REFERENCES Categorie (id);
 -- ALTER TABLE EtatCategorie ADD CONSTRAINT FKEtatCatego52731 FOREIGN KEY (etatid) REFERENCES etat (id);
@@ -214,6 +221,10 @@ INSERT INTO CompteClient(montant, etat, Clientid,actionTransaction) VALUES (2000
 INSERT INTO Enchere( produit, libelle, dateHeure, prixMin, duree, etat,idclient) VALUES ( 1, 'Bac a litiere', '2023-01-13 15:23:00', 10000, 1, '0',1);
 INSERT INTO Enchere( produit, libelle, dateHeure, prixMin, duree, etat,idclient) VALUES ( 7, 'Violon', '2023-01-13 15:30:00', 5000, 4, '7',2);
 INSERT INTO Enchere( produit, libelle, dateHeure, prixMin, duree, etat,idclient) VALUES ( 32, 'Lego', '2023-01-20 17:30:00', 25000, 10, '0',2);
+
+INSERT INTO MiserENchere VALUES (1,1,20000,'2023-01-13 16:30');
+INSERT INTO MiserENchere VALUES (2,1,50000,'2023-01-13 16:35');
+INSERT INTO MiserENchere(idEnchere,idClient,montant) VALUES (3,1,30000);
 --------------------------------------------------------------------------------------------------------
 create table chiffreObtenuSite(
     montant DOUBLE PRECISION,
@@ -347,3 +358,27 @@ BEGIN
     END LOOP;    
 END;
 $$;
+
+
+
+CREATE or replace FUNCTION montantmax(id int,montant double precision,client int) RETURNS int
+language plpgsql AS $$
+DECLARE 
+    f record;
+    retour int;
+    query text;
+BEGIN 
+    retour:=0;
+    for f in (select * from enchereplafond where idenchere=id and idclient!=client)
+    LOOP
+    query:='';
+    if f.montant>montant and montant+f.intervalle<=f.montant then
+        retour:=retour+1;
+        query:='insert into MiserENchere(idEnchere,idClient,montant) VALUES('||id||','||f.idClient||','||(montant+f.intervalle)||')';
+        EXECUTE query;
+    end if;
+    END LOOP; 
+    return retour;   
+END;
+$$;
+

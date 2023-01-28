@@ -44,9 +44,16 @@ public class EnchereRepository implements EnchereDAO{
         
     }
 
+    public Object maxmontant(MiserEnchere miser){
+        String sql = "select montantmax("+miser.getIdEnchere()+","+miser.getMontant()+","+miser.getIdclient()+")";
+        return (Object) jdbcTemplate.query(sql,new BeanPropertyRowMapper<Object>(Object.class));
+    }
+
+
     public void rencherir(MiserEnchere miser) {
         String sql="INSERT INTO miserenchere(idclient,idenchere,montant) values ("+miser.getIdclient()+","+miser.getIdEnchere()+","+miser.getMontant()+")";
         jdbcTemplate.update(sql);
+        this.maxmontant(miser);
         
     }
 }
