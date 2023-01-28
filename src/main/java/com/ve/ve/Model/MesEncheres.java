@@ -214,13 +214,13 @@ public class MesEncheres {
     public void setPrenom(String prenom) {
         this.prenom = prenom;
     }
-    private int client;
+    private Object client;
 
-    public int getClient() {
+    public Object getClient() {
         return client;
     }
 
-    public void setClient(int client) {
+    public void setClient(Object client) {
         this.client = client;
     }
 }
