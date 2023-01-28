@@ -41,14 +41,14 @@ public class VenteEnchereFront {
         return map;
     }
 
-    @RequestMapping(value = "/rechercheAvanceFront", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "/rechercheAvanceFront/{token}", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
     @CrossOrigin
-    public Map<String, Object> rechercheAvance(HttpServletRequest request) {
+    public Map<String, Object> rechercheAvance(HttpServletRequest request, @PathVariable String token) {
         Map<String, Object> map = new HashMap<>();
         GestionToken tok = new GestionToken();
         try {
-            Claims cl = tok.testTokenClaims(request);
+            Claims cl = tok.testTokenClaims(token);
             map.put("enchere", enchereRepository.searchEnchere(request.getParameter("search")));
         }
         catch(Exception e){
@@ -57,14 +57,14 @@ public class VenteEnchereFront {
         return map;
     }
 
-    @RequestMapping(value = "/getMesEncheres/{id}", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "/getMesEncheres/{id}/{token}", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
     @CrossOrigin
-    public Map<String, Object> getMesEncheres(HttpServletRequest request,@PathVariable int id) {
+    public Map<String, Object> getMesEncheres(HttpServletRequest request,@PathVariable int id, @PathVariable String token) {
         Map<String, Object> map = new HashMap<>();
         GestionToken tok = new GestionToken();
         try {
-            Claims cl = tok.testTokenClaims(request);
+            Claims cl = tok.testTokenClaims(token);
              map.put("enchere", enchereRepository.getMesEncheres(id));
         }
         catch(Exception e){
@@ -73,10 +73,10 @@ public class VenteEnchereFront {
         return map;
     }
 
-    @RequestMapping(value = "/insertEnchere/{id}", method = RequestMethod.POST, produces = "application/json")
+    @RequestMapping(value = "/insertEnchere/{id}/{token}", method = RequestMethod.POST, produces = "application/json")
     @ResponseBody
     @CrossOrigin
-    public void insertEnchere(HttpServletRequest request,@PathVariable int id) {
+    public void insertEnchere(HttpServletRequest request,@PathVariable int id, @PathVariable String token) {
         Map<String, Object> map = new HashMap<>();
         Enchere enchere = new Enchere();
         enchere.setProduit(Integer.parseInt(request.getParameter("produit")));
@@ -87,7 +87,7 @@ public class VenteEnchereFront {
         enchere.setEtat("0");
         GestionToken tok = new GestionToken();
         try {
-            Claims cl = tok.testTokenClaims(request);
+            Claims cl = tok.testTokenClaims(token);
             enchereRepository.insertEnchere(enchere);
             map.put("response","Insertion avec succes");
         }

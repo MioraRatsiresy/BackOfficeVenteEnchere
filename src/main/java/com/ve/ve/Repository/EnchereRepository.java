@@ -17,7 +17,7 @@ public class EnchereRepository implements EnchereDAO{
 
     @Override
     public ArrayList<Enchere> getListeEnchere() {
-        String sql = "select * from v_enchereEnCours";
+        String sql = "select * from getInfoEnchere()";
         return (ArrayList<Enchere>) jdbcTemplate.query(sql,new BeanPropertyRowMapper<Enchere>(Enchere.class));
 
     }

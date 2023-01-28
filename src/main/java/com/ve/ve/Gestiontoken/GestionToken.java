@@ -27,14 +27,14 @@ public class GestionToken {
         .parseClaimsJws(token).getBody().getExpiration();
   }
 
-  public Claims testTokenClaims(HttpServletRequest request) throws Exception {
-    final String authorizationHeaderValue = request.getHeader("Authorization");
-    String[] tokenParse = authorizationHeaderValue.split("Bearer ");
+  public Claims testTokenClaims(String token) throws Exception {
+    // final String authorizationHeaderValue = request.getHeader("Authorization");
+    // String[] tokenParse = authorizationHeaderValue.split("Bearer ");
     Claims cl = null;
-    if (tokenParse.length>1 && tokenParse[1]!= null) {
+    if (token!= null) {
       try {
         cl = Jwts.parser().setSigningKey(secretcode)
-            .parseClaimsJws(tokenParse[1]).getBody();
+            .parseClaimsJws(token).getBody();
       } catch (Exception e) {
         throw new Exception("Token Expired");
       }
@@ -42,7 +42,6 @@ public class GestionToken {
       throw new Exception("Token Invalid");
     }
     return cl;
-
   }
 
 }

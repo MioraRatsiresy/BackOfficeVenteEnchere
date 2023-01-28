@@ -19,6 +19,7 @@ import com.ve.ve.Model.Enchere;
 import com.ve.ve.Repository.AdminLoginRepository;
 import com.ve.ve.Repository.CategorieRepository;
 import com.ve.ve.Repository.ClientRepository;
+import com.ve.ve.Repository.MesEncheresRepository;
 
 import io.jsonwebtoken.Claims;
 
@@ -32,6 +33,9 @@ public class VenteEchereMobile {
 
     @Autowired
     private ClientRepository client;
+
+    @Autowired
+    private MesEncheresRepository mesEncheresRepository;
 
     // @PostMapping("/token")
     // public String sendPnsToDevice(HttpServletRequest request) {
@@ -58,10 +62,10 @@ public class VenteEchereMobile {
 
     //     return response;
     // }
-    @RequestMapping(value = "/rechargermoncompte/{id}", method = RequestMethod.POST, produces = "application/json")
+    @RequestMapping(value = "/rechargermoncompte/{id}/{token}", method = RequestMethod.POST, produces = "application/json")
     @ResponseBody
     @CrossOrigin
-    public void insertEnchere(HttpServletRequest request,@PathVariable int id) {
+    public void insertEnchere(HttpServletRequest request,@PathVariable int id, @PathVariable String token) {
         Map<String,Object> map=new HashMap<>();
         CompteClient compte=new CompteClient();
         compte.setClientid(id);
@@ -70,7 +74,7 @@ public class VenteEchereMobile {
         compte.setActionTransaction(4);
         GestionToken tok = new GestionToken();
         try {
-            Claims cl = tok.testTokenClaims(request);
+            Claims cl = tok.testTokenClaims(token);
             client.rechargerMonCompte(compte);
             map.put("Status","Rechargment du compte avec succes");
         }
@@ -79,6 +83,21 @@ public class VenteEchereMobile {
         }
     }
 
- 
+    @RequestMapping(value = "/listeMesEncheres/{id}/{token}", method = RequestMethod.GET, produces = "application/json")
+    @ResponseBody
+    @CrossOrigin
+    public Map<String, Object> listeMesEncheres(HttpServletRequest request, @PathVariable int id, @PathVariable String token){
+        Map<String, Object> map = new HashMap<>();
+        GestionToken tok = new GestionToken();
+        try {
+            Claims cl = tok.testTokenClaims(token);
+           // map.put("Status","Succes");
+            map.put("mesEncheres", mesEncheresRepository.getMesEncheres(id));
+		} catch (Exception e) {
+            e.printStackTrace();
+            map.put("Erreur",e.getMessage());
+        }
+        return map;
+    }
 
 }
