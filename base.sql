@@ -281,7 +281,7 @@ select*, dateheure+interval '1 day'*duree as datefin from encheredetail where da
 
 
 
-CREATE OR REPLACE VIEW encheretemp as  SELECT Enchere.*,MiserENchere.idclient as client,case when MiserENchere.montant is null then 0 else MiserENchere.montant end as montant,Client.nom,Client.prenom from Enchere left join miserenchere on miserenchere.idEnchere=enchere.id left  join Client on Client.id=MiserEnchere.idclient;
+CREATE OR REPLACE VIEW encheretemp as  SELECT Enchere.*,MiserENchere.idclient as client,case when MiserENchere.montant is null then prixMin else MiserENchere.montant end as montant,Client.nom,Client.prenom from Enchere left join miserenchere on miserenchere.idEnchere=enchere.id left  join Client on Client.id=MiserEnchere.idclient;
 
 ----VIEW
 CREATE or replace VIEW EnchereDetail as 
