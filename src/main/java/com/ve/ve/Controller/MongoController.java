@@ -72,11 +72,11 @@ public class MongoController {
         return map;
     }
 
-    @RequestMapping(value = "/liste", method = RequestMethod.GET,produces = "application/json")
+    @RequestMapping(value = "/getPhotoEnchere/{id}", method = RequestMethod.GET,produces = "application/json")
     @ResponseBody
     @CrossOrigin
-    public List<PhotoEnchere> liste() {
-       return photo.findAll();
+    public List<PhotoEnchere> getPhoto(@PathVariable int id) {
+       return photo.findByIdEnchere(id);
     }
 
  

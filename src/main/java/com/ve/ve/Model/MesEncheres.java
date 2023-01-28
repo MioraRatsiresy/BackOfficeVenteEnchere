@@ -5,6 +5,12 @@
  */
 package com.ve.ve.Model;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.ve.ve.Repository.PhotoEnchereRepository;
+
 /**
  *
  * @author Mbola
@@ -223,4 +229,14 @@ public class MesEncheres {
     public void setClient(Object client) {
         this.client = client;
     }
+    private List<PhotoEnchere> photos;
+
+    public List<PhotoEnchere> getPhotos() {
+        return photos;
+    }
+
+    public void setPhotos(List<PhotoEnchere> photos) {
+        this.photos = photos;
+    }
+    
 }

@@ -16,11 +16,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ve.ve.Model.Enchere;
+import com.ve.ve.Model.MesEncheres;
 import com.ve.ve.Gestiontoken.GestionToken;
 import com.ve.ve.Model.Client;
 import com.ve.ve.Repository.ClientRepository;
 import com.ve.ve.Repository.EnchereRepository;
 import com.ve.ve.Repository.MesEncheresRepository;
+import com.ve.ve.Repository.PhotoEnchereRepository;
 
 import io.jsonwebtoken.Claims;
 
@@ -36,12 +38,19 @@ public class VenteEnchereFront {
     @Autowired
     private ClientRepository clientRepository;
 
+    @Autowired
+    private PhotoEnchereRepository photo;
+
     @RequestMapping(value = "/listeEnchereFront", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
     @CrossOrigin
     public Map<String, Object> listeEnchere() {
         Map<String, Object> map = new HashMap<>();
-        map.put("enchere", mesEncheresRepository.getListeEnchere());
+        ArrayList<MesEncheres> enchere=mesEncheresRepository.getListeEnchere();
+        for(int i=0;i<enchere.size();i++){
+            enchere.get(i).setPhotos(photo.findByIdEnchere(i));
+        }
+        map.put("enchere",enchere);
         return map;
     }
 
