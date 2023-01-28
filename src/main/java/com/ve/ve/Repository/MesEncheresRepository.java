@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import com.ve.ve.DAO.EnchereDAO;
 import com.ve.ve.DAO.MesEncheresDAO;
 import com.ve.ve.Model.Enchere;
+import com.ve.ve.Model.MesEncheres;
 
 @Repository
 public class MesEncheresRepository implements MesEncheresDAO{
@@ -24,9 +25,10 @@ public class MesEncheresRepository implements MesEncheresDAO{
     }
 
     @Override
-    public ArrayList<Enchere> getMesEncheres(int id) {
+    public ArrayList<MesEncheres> getMesEncheres(int id) {
         String sql = "select * from getInfoEnchere() where idclient="+id;
-        return (ArrayList<Enchere>) jdbcTemplate.query(sql,new BeanPropertyRowMapper<Enchere>(Enchere.class));
+        System.out.println("Requete : "+sql);
+        return (ArrayList<MesEncheres>) jdbcTemplate.query(sql,new BeanPropertyRowMapper<MesEncheres>(MesEncheres.class));
     }
 
 }

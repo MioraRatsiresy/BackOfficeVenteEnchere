@@ -19,6 +19,7 @@ import com.ve.ve.Model.Enchere;
 import com.ve.ve.Repository.AdminLoginRepository;
 import com.ve.ve.Repository.CategorieRepository;
 import com.ve.ve.Repository.ClientRepository;
+import com.ve.ve.Repository.MesEncheresRepository;
 
 import io.jsonwebtoken.Claims;
 
@@ -32,6 +33,9 @@ public class VenteEchereMobile {
 
     @Autowired
     private ClientRepository client;
+
+    @Autowired
+    private MesEncheresRepository mesEncheresRepositry;
 
     // @PostMapping("/token")
     // public String sendPnsToDevice(HttpServletRequest request) {
@@ -81,6 +85,21 @@ public class VenteEchereMobile {
         }
     }
 
- 
+    @RequestMapping(value = "/listeMesEncheres/{id}/{token}", method = RequestMethod.GET, produces = "application/json")
+    @ResponseBody
+    @CrossOrigin
+    public Map<String, Object> listeMesEncheres(HttpServletRequest request, @PathVariable int id, @PathVariable String token){
+        Map<String, Object> map = new HashMap<>();
+        GestionToken tok = new GestionToken();
+        try {
+            Claims cl = tok.testTokenClaims(token);
+           // map.put("Status","Succes");
+            map.put("mesEncheres", mesEncheresRepositry.getMesEncheres(id));
+		} catch (Exception e) {
+            e.printStackTrace();
+            map.put("Erreur",e.getMessage());
+        }
+        return map;
+    }
 
 }

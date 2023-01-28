@@ -205,6 +205,7 @@ INSERT INTO CompteClient(montant, etat, Clientid,actionTransaction) VALUES (2000
 INSERT INTO Enchere( produit, libelle, dateHeure, prixMin, duree, etat,idclient) VALUES ( 1, 'Bac a litiere', '2023-01-13 15:23:00', 10000, 1, '0',1);
 INSERT INTO Enchere( produit, libelle, dateHeure, prixMin, duree, etat,idclient) VALUES ( 7, 'Violon', '2023-01-13 15:30:00', 5000, 4, '7',2);
 INSERT INTO Enchere( produit, libelle, dateHeure, prixMin, duree, etat,idclient) VALUES ( 32, 'Lego', '2023-01-20 17:30:00', 25000, 10, '0',2);
+INSERT INTO Enchere( produit, libelle, dateHeure, prixMin, duree, etat,idclient) VALUES ( 32, 'Lego', '2023-01-20 17:30:00', 25000, 10, '0',2);
 --------------------------------------------------------------------------------------------------------
 create table chiffreObtenuSite(
     montant DOUBLE PRECISION,
@@ -299,12 +300,13 @@ DECLARE
 BEGIN 
     for statutEnchere in (select*from v_statutenchere)
     LOOP
-        IF statutEnchere.dateHeure<=current_timestamp and current_timestamp<=statutEnchere.dateFin then
-            statut:='En cours';
-        ELSE 
-            EXECUTE format('UPDATE enchere SET etat = 7 WHERE dateheure<=current_timestamp and current_timestamp<=dateheure+interval ''1 day''*duree');
+        IF current_timestamp>statutEnchere.dateFin THEN 
+            EXECUTE format('UPDATE enchere SET etat = 7 WHERE current_timestamp>=dateheure+interval ''1 day''*duree');
             statut:='Termine';
         END IF;
+    END LOOP;
+    for statutEnchere in (select*from v_statutenchere)
+    LOOP   
         idEnchere:=statutEnchere.id;
         produit:=statutEnchere.produit;
         libelle:=statutEnchere.libelle;
@@ -316,7 +318,13 @@ BEGIN
         produitEnchere:=statutEnchere.produitEnchere;
         categorie:=statutEnchere.categorie;
         dateFin:=statutEnchere.dateFin;
-        return next;
-    END LOOP;    
+        IF statutEnchere.etat::int=0 THEN 
+            statut:='En cours';
+        END IF;
+        IF  statutEnchere.etat::int=7 THEN 
+            statut:='Termine';
+        END IF;
+    return next;
+    END LOOP; 
 END;
 $$;
