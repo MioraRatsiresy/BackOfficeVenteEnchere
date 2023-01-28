@@ -190,4 +190,37 @@ public class MesEncheres {
     public void setStatut(String statut) {
         this.statut = statut;
     }
+    private double montant;
+    public double getMontant() {
+        return montant;
+    }
+
+    public void setMontant(double montant) {
+        this.montant = montant;
+    }
+    private String nom;
+    public String getNom() {
+        return nom;
+    }
+
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
+    private String prenom;
+    public String getPrenom() {
+        return prenom;
+    }
+
+    public void setPrenom(String prenom) {
+        this.prenom = prenom;
+    }
+    private int client;
+
+    public int getClient() {
+        return client;
+    }
+
+    public void setClient(int client) {
+        this.client = client;
+    }
 }

@@ -20,6 +20,7 @@ import com.ve.ve.Gestiontoken.GestionToken;
 import com.ve.ve.Model.Client;
 import com.ve.ve.Repository.ClientRepository;
 import com.ve.ve.Repository.EnchereRepository;
+import com.ve.ve.Repository.MesEncheresRepository;
 
 import io.jsonwebtoken.Claims;
 
@@ -30,6 +31,9 @@ public class VenteEnchereFront {
     private EnchereRepository enchereRepository;
 
     @Autowired
+    private MesEncheresRepository mesEncheresRepository;
+
+    @Autowired
     private ClientRepository clientRepository;
 
     @RequestMapping(value = "/listeEnchereFront", method = RequestMethod.GET, produces = "application/json")
@@ -37,7 +41,7 @@ public class VenteEnchereFront {
     @CrossOrigin
     public Map<String, Object> listeEnchere() {
         Map<String, Object> map = new HashMap<>();
-        map.put("enchere", enchereRepository.getListeEnchere());
+        map.put("enchere", mesEncheresRepository.getListeEnchere());
         return map;
     }
 
@@ -65,7 +69,7 @@ public class VenteEnchereFront {
         GestionToken tok = new GestionToken();
         try {
             Claims cl = tok.testTokenClaims(token);
-             map.put("enchere", enchereRepository.getMesEncheres(id));
+             map.put("enchere", mesEncheresRepository.getMesEncheres(id));
         }
         catch(Exception e){
             map.put("Erreur",e.getMessage());

@@ -6,6 +6,6 @@ import com.ve.ve.Model.Enchere;
 import com.ve.ve.Model.MesEncheres;
 
 public interface MesEncheresDAO {
-    ArrayList<Enchere> getListeEnchere();
+    ArrayList<MesEncheres> getListeEnchere();
     ArrayList<MesEncheres> getMesEncheres(int id);
 }

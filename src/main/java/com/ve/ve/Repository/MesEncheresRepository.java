@@ -18,9 +18,9 @@ public class MesEncheresRepository implements MesEncheresDAO{
     private JdbcTemplate jdbcTemplate;
 
     @Override
-    public ArrayList<Enchere> getListeEnchere() {
+    public ArrayList<MesEncheres> getListeEnchere() {
         String sql = "select * from getInfoEnchere()";
-        return (ArrayList<Enchere>) jdbcTemplate.query(sql,new BeanPropertyRowMapper<Enchere>(Enchere.class));
+        return (ArrayList<MesEncheres>) jdbcTemplate.query(sql,new BeanPropertyRowMapper<MesEncheres>(MesEncheres.class));
 
     }
 

@@ -88,10 +88,18 @@ CREATE TABLE Enchere (
 ALTER TABLE Enchere ADD FOREIGN KEY(produit) REFERENCES Produit(id);
 ALTER TABLE Enchere ADD FOREIGN KEY(idclient) REFERENCES Client(id);
 
-----VIEW
-CREATE VIEW EnchereDetail as 
-SELECT Enchere.*,Produit.produit as produitEnchere,Categorie.categorie
-from Enchere join Produit on Produit.id=Enchere.produit join Categorie on Categorie.id=Produit.categorie;
+
+CREATE TABLE MiserEnchere (
+    idclient int4 NOT NULL,
+    idEnchere int,
+    montant double precision,
+    dateheure timestamp default current_timestamp,
+    FOREIGN KEY(idclient) REFERENCES Client(id),
+    FOREIGN KEY(idEnchere) REFERENCES Enchere(id)
+);
+INSERT INTO MiserENchere VALUES (1,1,20000,'2023-01-13 16:30');
+INSERT INTO MiserENchere VALUES (2,1,50000,'2023-01-13 16:35');
+
 
 -- ALTER TABLE EnchereAdmin ADD CONSTRAINT FKEnchereAdm945139 FOREIGN KEY (Categorieid) REFERENCES Categorie (id);
 -- ALTER TABLE EtatCategorie ADD CONSTRAINT FKEtatCatego274392 FOREIGN KEY (Categorieid) REFERENCES Categorie (id);
@@ -271,6 +279,16 @@ m.mois as nomMois from v_chiffreAffaireMois v right join mois m on m.id=v.mois;
 create or replace view v_enchereEnCours as 
 select*, dateheure+interval '1 day'*duree as datefin from encheredetail where dateheure<=current_timestamp and current_timestamp<=dateheure+interval '1 day'*duree and etat='0';
 
+
+
+CREATE OR REPLACE VIEW encheretemp as  SELECT Enchere.*,MiserENchere.idclient as client,case when MiserENchere.montant is null then 0 else MiserENchere.montant end as montant,Client.nom,Client.prenom from Enchere left join miserenchere on miserenchere.idEnchere=enchere.id left  join Client on Client.id=MiserEnchere.idclient;
+
+----VIEW
+CREATE or replace VIEW EnchereDetail as 
+select f.*,Produit.produit as produitEnchere,Categorie.categorie
+from encheretemp f join Produit on Produit.id=f.produit join Categorie on Categorie.id=Produit.categorie  where montant=(select max(montant) from encheretemp where id=f.id);
+
+
 create or replace view v_statutEnchere as 
 select ed.*, 
 dateheure+interval '1 day'*duree as datefin,
@@ -290,7 +308,11 @@ table(
     produitEnchere VARCHAR(50),
     categorie VARCHAR(50),
     dateFin TIMESTAMP,
-    statut VARCHAR(20)
+    statut VARCHAR(20),
+    client int,
+    nom varchar(50),
+    prenom varchar(50),
+    montant double precision
 ) language plpgsql AS $$
 DECLARE 
     statutEnchere record;
@@ -316,6 +338,10 @@ BEGIN
         produitEnchere:=statutEnchere.produitEnchere;
         categorie:=statutEnchere.categorie;
         dateFin:=statutEnchere.dateFin;
+        client:=statutEnchere.client;
+        nom:=statutEnchere.nom;
+        prenom:=statutEnchere.prenom;
+        montant:=statutEnchere.montant;
         return next;
     END LOOP;    
 END;
