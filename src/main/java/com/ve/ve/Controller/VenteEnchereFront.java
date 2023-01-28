@@ -45,19 +45,12 @@ public class VenteEnchereFront {
         return map;
     }
 
-    @RequestMapping(value = "/rechercheAvanceFront/{token}", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "/rechercheAvanceFront", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
     @CrossOrigin
-    public Map<String, Object> rechercheAvance(HttpServletRequest request, @PathVariable String token) {
+    public Map<String, Object> rechercheAvance(HttpServletRequest request) {
         Map<String, Object> map = new HashMap<>();
-        GestionToken tok = new GestionToken();
-        try {
-            Claims cl = tok.testTokenClaims(token);
-            map.put("enchere", enchereRepository.searchEnchere(request.getParameter("search")));
-        }
-        catch(Exception e){
-            map.put("Erreur", e.getMessage());
-        }
+        map.put("enchere", enchereRepository.searchEnchere(request.getParameter("search")));
         return map;
     }
 

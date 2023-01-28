@@ -99,6 +99,7 @@ CREATE TABLE MiserEnchere (
 );
 INSERT INTO MiserENchere VALUES (1,1,20000,'2023-01-13 16:30');
 INSERT INTO MiserENchere VALUES (2,1,50000,'2023-01-13 16:35');
+INSERT INTO MiserENchere(idEnchere,idClient,montant) VALUES (3,1,30000);
 
 
 -- ALTER TABLE EnchereAdmin ADD CONSTRAINT FKEnchereAdm945139 FOREIGN KEY (Categorieid) REFERENCES Categorie (id);

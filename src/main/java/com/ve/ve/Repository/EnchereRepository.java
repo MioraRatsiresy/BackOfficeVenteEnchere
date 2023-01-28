@@ -9,6 +9,8 @@ import org.springframework.stereotype.Repository;
 
 import com.ve.ve.DAO.EnchereDAO;
 import com.ve.ve.Model.Enchere;
+import com.ve.ve.Model.MesEncheres;
+import com.ve.ve.Model.MiserEnchere;
 
 @Repository
 public class EnchereRepository implements EnchereDAO{
@@ -23,9 +25,10 @@ public class EnchereRepository implements EnchereDAO{
     }
 
     @Override
-    public ArrayList<Enchere> searchEnchere(String search) {
-        String sql = "SELECT * from EnchereDetail where (dateheure::varchar) like '%"+search+"%' or lower(categorie) like '%"+search+"%' or lower(prixMin::varchar) like '%"+search+"%' or lower(etat) like '%"+search+"%'";
-        return  (ArrayList<Enchere>) jdbcTemplate.query(sql,new BeanPropertyRowMapper<Enchere>(Enchere.class));
+    public ArrayList<MesEncheres> searchEnchere(String search) {
+        String sql = "SELECT * from getInfoEnchere() where (dateheure::varchar) like '%"+search+"%' or lower(categorie) like '%"+search+"%' or lower(prixMin::varchar) like '%"+search+"%' or lower(statut) like '%"+search+"%'";
+        System.out.println(sql);
+        return  (ArrayList<MesEncheres>) jdbcTemplate.query(sql,new BeanPropertyRowMapper<MesEncheres>(MesEncheres.class));
     }
 
     @Override
@@ -37,6 +40,12 @@ public class EnchereRepository implements EnchereDAO{
     @Override
     public void insertEnchere(Enchere enchere) {
         String sql="INSERT INTO enchere values (default,'"+enchere.getProduit()+"','"+enchere.getLibelle()+"',current_timestamp,'"+enchere.getPrixMin()+"','"+enchere.getDuree()+"','"+enchere.getEtat()+"','"+enchere.getIdclient()+"')";
+        jdbcTemplate.update(sql);
+        
+    }
+
+    public void rencherir(MiserEnchere miser) {
+        String sql="INSERT INTO miserenchere(idclient,idenchere,montant) values ("+miser.getIdclient()+","+miser.getIdEnchere()+","+miser.getMontant()+")";
         jdbcTemplate.update(sql);
         
     }
