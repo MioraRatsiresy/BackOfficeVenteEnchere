@@ -63,8 +63,13 @@ public class MongoController {
         GestionToken tok = new GestionToken();
         try {
             Claims cl = tok.testTokenClaims(token);
+            if(enchere.verifyCompte(me)){
             enchere.rencherir(me);
             map.put("Status","Insertion avec succes");
+            }
+            else{
+                map.put("Compte", "Solde insuffisante pour cette transaction");
+            }
         }
         catch(Exception e){
             map.put("Erreur",e.getMessage());

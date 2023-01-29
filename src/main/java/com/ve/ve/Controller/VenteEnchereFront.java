@@ -47,8 +47,6 @@ public class VenteEnchereFront {
     public Map<String, Object> listeEnchere() {
         Map<String, Object> map = new HashMap<>();
         ArrayList<MesEncheres> enchere=mesEncheresRepository.getListeEnchere();
-        System.out.println(enchere.get(3).getLibelle());
-        System.out.println(enchere.get(3).getStatut());
         for(int i=0;i<enchere.size();i++){
             enchere.get(i).setPhotos(photo.findByIdEnchere(i));
         }

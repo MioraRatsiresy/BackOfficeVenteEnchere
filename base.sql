@@ -389,6 +389,14 @@ BEGIN
 END;
 $$;
 
+CREATE or REPLACE VIEW debitClient as SELECT *,case when (SELECT sum(montant) from compteclient where actiontransaction=0 and clientid=client.id) is null then 0 ELSE (SELECT sum(montant) from compteclient where actiontransaction=0 and clientid=client.id) end debit,(select case when sum(montant) is null then 0 else sum(montant) end argentbloque from getInfoENchere() where client=client.id and etat='0') from Client;
+
+
+CREATE or REPLACE VIEW creditClient as SELECT *,case when (SELECT sum(montant) from compteclient where clientid=client.id and ((actiontransaction=4 and etat=3) or actiontransaction=6)) is null then 0 else (SELECT sum(montant) from compteclient where clientid=client.id and ((actiontransaction=4 and etat=3) or actiontransaction=6)) end credit from client;
+
+
+
+Create or REPLACE VIEW SoldeClient as SELECT  Creditclient.id,creditClient.nom,creditClient.prenom,creditClient.contact,argentbloque,credit-(debit+argentbloque) as solde from debitClient join creditClient on creditClient.id=debitClient.id;
 
 --possibilité de mettre un chiffre max
 CREATE or replace FUNCTION montantmax(id int,montant double precision,client int) RETURNS int
@@ -417,25 +425,18 @@ set time zone 'UTC-3';
 
 
 --bloquer compte
--- CREATE or replace FUNCTION montantmax(id int,montant double precision,client int) RETURNS int
--- language plpgsql AS $$
--- DECLARE 
---     f record;
---     retour int;
---     query text;
--- BEGIN 
---     retour:=0;
---     for f in (select * from enchereplafond where idenchere=id and idclient!=client)
---     LOOP
---     query:='';
---     if f.montant>montant and montant+f.intervalle<=f.montant then
---         retour:=retour+1;
---         query:='insert into MiserENchere(idEnchere,idClient,montant) VALUES('||id||','||f.idClient||','||(montant+f.intervalle)||')';
---         EXECUTE query;
---     end if;
---     END LOOP; 
---     return retour;   
--- END;
--- $$;
+CREATE or replace FUNCTION montantmax(client int,montant) RETURNS int
+language plpgsql AS $$
+DECLARE 
+    f record;
+    retour int;
+BEGIN 
+    retour:=0;
+    for f in (select * from enchereplafond where idenchere=id and idclient!=client)
+    LOOP
+    END LOOP; 
+    return retour;   
+END;
+$$;
 
 

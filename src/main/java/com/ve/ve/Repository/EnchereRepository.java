@@ -11,6 +11,7 @@ import com.ve.ve.DAO.EnchereDAO;
 import com.ve.ve.Model.Enchere;
 import com.ve.ve.Model.MesEncheres;
 import com.ve.ve.Model.MiserEnchere;
+import com.ve.ve.Model.SoldeClient;
 
 @Repository
 public class EnchereRepository implements EnchereDAO{
@@ -47,6 +48,15 @@ public class EnchereRepository implements EnchereDAO{
     public Object maxmontant(MiserEnchere miser){
         String sql = "select montantmax("+miser.getIdEnchere()+","+miser.getMontant()+","+miser.getIdclient()+")";
         return (Object) jdbcTemplate.query(sql,new BeanPropertyRowMapper<Object>(Object.class));
+    }
+
+    public boolean verifyCompte(MiserEnchere miser){
+        String sql = "select * from soldeclient where id="+miser.getIdclient();
+        ArrayList<SoldeClient> cl= (ArrayList<SoldeClient>) jdbcTemplate.query(sql,new BeanPropertyRowMapper<SoldeClient>(SoldeClient.class));
+        if(miser.getMontant()<=cl.get(0).getSolde()){
+            return true;
+        }
+        return false;
     }
 
 
