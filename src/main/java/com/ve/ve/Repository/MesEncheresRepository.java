@@ -20,6 +20,7 @@ public class MesEncheresRepository implements MesEncheresDAO{
     @Override
     public ArrayList<MesEncheres> getListeEnchere() {
         String sql = "select * from getInfoEnchere()";
+        System.out.println(sql);
         return (ArrayList<MesEncheres>) jdbcTemplate.query(sql,new BeanPropertyRowMapper<MesEncheres>(MesEncheres.class));
 
     }

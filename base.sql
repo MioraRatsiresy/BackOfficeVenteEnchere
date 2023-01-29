@@ -67,7 +67,7 @@ CREATE TABLE CompteClient (
     montant float8 NOT NULL,
     etat int4 default 0 NOT NULL, --0 en cours //3 validé // 8 refusé
     Clientid int4 NOT NULL, 
-    actionTransaction int default 0, --0 debit --4 credit
+    actionTransaction int default 0, --0 debit --4 credit -- 6 vente 
     PRIMARY KEY(id)
 );
 
@@ -221,14 +221,16 @@ INSERT INTO CompteClient(montant, etat, Clientid,actionTransaction) VALUES (2000
 INSERT INTO Enchere( produit, libelle, dateHeure, prixMin, duree, etat,idclient) VALUES ( 1, 'Bac a litiere', '2023-01-13 15:23:00', 10000, 1, '0',1);
 INSERT INTO Enchere( produit, libelle, dateHeure, prixMin, duree, etat,idclient) VALUES ( 7, 'Violon', '2023-01-13 15:30:00', 5000, 4, '7',2);
 INSERT INTO Enchere( produit, libelle, dateHeure, prixMin, duree, etat,idclient) VALUES ( 32, 'Lego', '2023-01-20 17:30:00', 25000, 10, '0',2);
+INSERT INTO Enchere( produit, libelle, dateHeure, prixMin, duree, etat,idclient) VALUES ( 4, 'Appareil electromenager', '2023-01-28 09:00:00', 3000000, 1, '0',1);
 
 INSERT INTO MiserENchere VALUES (1,1,20000,'2023-01-13 16:30');
 INSERT INTO MiserENchere VALUES (2,1,50000,'2023-01-13 16:35');
+INSERT INTO MiserENchere VALUES (4,2,5000000,'2023-01-29 09:35');
 INSERT INTO MiserENchere(idEnchere,idClient,montant) VALUES (3,1,30000);
 --------------------------------------------------------------------------------------------------------
 create table chiffreObtenuSite(
     montant DOUBLE PRECISION,
-    dateObtention date
+    dateObtention date default current_timestamp
 );
 
 
@@ -301,6 +303,10 @@ select f.*,Produit.produit as produitEnchere,Categorie.categorie
 from encheretemp f join Produit on Produit.id=f.produit join Categorie on Categorie.id=Produit.categorie  where montant=(select max(montant) from encheretemp where id=f.id);
 
 
+--compte client
+--chiffreaffaire
+
+
 create or replace view v_statutEnchere as 
 select ed.*, 
 dateheure+interval '1 day'*duree as datefin,
@@ -330,14 +336,38 @@ DECLARE
     statutEnchere record;
     tab record;
     id int;
+    volamiditra double precision;
 BEGIN 
     for statutEnchere in (select*from v_statutenchere)
     LOOP
-        IF statutEnchere.dateHeure<=current_timestamp and current_timestamp<=statutEnchere.dateFin then
+        RAISE NOTICE '%',current_timestamp;
+        RAISE NOTICE '%',statutEnchere.id;
+        volamiditra:=0;
+        IF current_timestamp between statutEnchere.dateHeure and statutEnchere.dateFin then
+            RAISE NOTICE 'Tokn en cours';
             statut:='En cours';
-        ELSE 
-            EXECUTE format('UPDATE enchere SET etat = 7 WHERE dateheure<=current_timestamp and current_timestamp<=dateheure+interval ''1 day''*duree');
-            statut:='Termine';
+        ELSE
+            if statutEnchere.etat='0' then
+                IF statutEnchere.client is not null then
+                    RAISE NOTICE 'Ato isika';
+                    --vola miditra oanle site
+                    EXECUTE format('INSERT INTO chiffreObtenuSite values ('||statutEnchere.montant*(select pourcentage from Commission)/100||',''||now()||'')');
+                    RAISE NOTICE 'Vita iny';
+                    volamiditra:=statutEnchere.montant*(1-((select pourcentage from Commission)/100));
+                    --vola miditra oan tompony
+                    EXECUTE format('INSERT INTO compteclient(montant,etat,clientid,actiontransaction) values ('||volamiditra||',0,'||statutEnchere.idclient||',6)');
+                    RAISE NOTICE 'Vita 2';
+                    --vola miala oanle nividy
+                    EXECUTE format('INSERT INTO compteclient(montant,etat,clientid,actiontransaction) values ('||statutEnchere.montant||',0,'||statutEnchere.client||',0)');
+
+                    RAISE NOTICE 'Vita 3';
+                    RAISE NOTICE 'I:%;II:%,III:%',(statutEnchere.montant*(select pourcentage from Commission)/100),volamiditra,statutEnchere.montant;
+                    --  EXECUTE format('UPDATE enchere SET etat = ''7'' WHERE dateheure<=current_timestamp and current_timestamp<=dateheure+interval ''1 day''*duree');
+                end if;
+            end if;
+            statut:='Termine'; 
+            EXECUTE format('UPDATE enchere SET etat =''7'' WHERE id='||statutEnchere.id);
+            -- EXECUTE format('UPDATE enchere SET etat = ''7'' WHERE dateheure<=current_timestamp and current_timestamp<=dateheure+interval ''1 day''*duree');
         END IF;
         idEnchere:=statutEnchere.id;
         produit:=statutEnchere.produit;
@@ -360,7 +390,7 @@ END;
 $$;
 
 
-
+--possibilité de mettre un chiffre max
 CREATE or replace FUNCTION montantmax(id int,montant double precision,client int) RETURNS int
 language plpgsql AS $$
 DECLARE 
@@ -381,4 +411,31 @@ BEGIN
     return retour;   
 END;
 $$;
+
+--timezone
+set time zone 'UTC-3';
+
+
+--bloquer compte
+-- CREATE or replace FUNCTION montantmax(id int,montant double precision,client int) RETURNS int
+-- language plpgsql AS $$
+-- DECLARE 
+--     f record;
+--     retour int;
+--     query text;
+-- BEGIN 
+--     retour:=0;
+--     for f in (select * from enchereplafond where idenchere=id and idclient!=client)
+--     LOOP
+--     query:='';
+--     if f.montant>montant and montant+f.intervalle<=f.montant then
+--         retour:=retour+1;
+--         query:='insert into MiserENchere(idEnchere,idClient,montant) VALUES('||id||','||f.idClient||','||(montant+f.intervalle)||')';
+--         EXECUTE query;
+--     end if;
+--     END LOOP; 
+--     return retour;   
+-- END;
+-- $$;
+
 
