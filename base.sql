@@ -215,18 +215,17 @@ INSERT INTO EtatCategorie(Categorieid, etatid) VALUES (10, 1);
 INSERT INTO Commission(id, pourcentage) VALUES (1, 5);
 INSERT INTO Client(id, nom, prenom, contact, identifiant, pwd) VALUES (default, 'Andrianasolonavalona', 'Mbolatiana Liliane', '0382069125', 'Mbola', '8b3cc7deb981e42cbec867c8fd44a5ec');
 INSERT INTO Client(id, nom, prenom, contact, identifiant, pwd) VALUES (default, 'Andrianiony', 'Miharizo Kanto', '0345162879', 'Kanto', 'c33a17d4a2729f26fbd86d67dcf3e97b');
-INSERT INTO CompteClient(montant, etat, Clientid,actionTransaction) VALUES (250000, 0, 1,0);
-INSERT INTO CompteClient(montant, etat, Clientid,actionTransaction) VALUES (100000, 0, 1,4);
-INSERT INTO CompteClient(montant, etat, Clientid,actionTransaction) VALUES (20000, 1, 2,0);
-INSERT INTO Enchere( produit, libelle, dateHeure, prixMin, duree, etat,idclient) VALUES ( 1, 'Bac a litiere', '2023-01-13 15:23:00', 10000, 1, '0',1);
-INSERT INTO Enchere( produit, libelle, dateHeure, prixMin, duree, etat,idclient) VALUES ( 7, 'Violon', '2023-01-13 15:30:00', 5000, 4, '7',2);
+INSERT INTO CompteClient(montant, etat, Clientid,actionTransaction) VALUES (100000, 3, 1,4);
+INSERT INTO CompteClient(montant, etat, Clientid,actionTransaction) VALUES (200000, 3, 2,4);
+INSERT INTO Enchere( produit, libelle, dateHeure, prixMin, duree, etat,idclient) VALUES ( 1, 'Bac a litiere', '2023-01-28 11:30:00', 10000, 1, '0',1);
+INSERT INTO Enchere( produit, libelle, dateHeure, prixMin, duree, etat,idclient) VALUES ( 7, 'Violon', '2023-01-28 11:25:00', 5000, 4, '7',2);
 INSERT INTO Enchere( produit, libelle, dateHeure, prixMin, duree, etat,idclient) VALUES ( 32, 'Lego', '2023-01-20 17:30:00', 25000, 10, '0',2);
-INSERT INTO Enchere( produit, libelle, dateHeure, prixMin, duree, etat,idclient) VALUES ( 4, 'Appareil electromenager', '2023-01-28 09:00:00', 3000000, 1, '0',1);
+INSERT INTO Enchere( produit, libelle, dateHeure, prixMin, duree, etat,idclient) VALUES ( 4, 'Appareil electromenager', '2023-01-28 11:35:00', 3000000, 1, '0',1);
 
-INSERT INTO MiserENchere VALUES (1,1,20000,'2023-01-13 16:30');
-INSERT INTO MiserENchere VALUES (2,1,50000,'2023-01-13 16:35');
-INSERT INTO MiserENchere VALUES (4,2,5000000,'2023-01-29 09:35');
-INSERT INTO MiserENchere(idEnchere,idClient,montant) VALUES (3,1,30000);
+-- INSERT INTO MiserENchere VALUES (1,1,20000,'2023-01-13 16:30');
+-- INSERT INTO MiserENchere VALUES (2,1,50000,'2023-01-13 16:35');
+-- INSERT INTO MiserENchere VALUES (4,2,5000000,'2023-01-29 09:35');
+-- INSERT INTO MiserENchere(idEnchere,idClient,montant) VALUES (3,1,30000);
 --------------------------------------------------------------------------------------------------------
 create table chiffreObtenuSite(
     montant DOUBLE PRECISION,
@@ -234,11 +233,11 @@ create table chiffreObtenuSite(
 );
 
 
-insert into chiffreObtenuSite VALUES
-(400000,'2022-07-06'),
-(600000,'2022-07-12'),
-(400000,'2022-09-23'),
-(400000,'2022-12-25');
+-- insert into chiffreObtenuSite VALUES
+-- (400000,'2022-07-06'),
+-- (600000,'2022-07-12'),
+-- (400000,'2022-09-23'),
+-- (400000,'2022-12-25');
 
 create table mois(
     id int primary key,
@@ -423,20 +422,5 @@ $$;
 --timezone
 set time zone 'UTC-3';
 
-
---bloquer compte
-CREATE or replace FUNCTION montantmax(client int,montant) RETURNS int
-language plpgsql AS $$
-DECLARE 
-    f record;
-    retour int;
-BEGIN 
-    retour:=0;
-    for f in (select * from enchereplafond where idenchere=id and idclient!=client)
-    LOOP
-    END LOOP; 
-    return retour;   
-END;
-$$;
 
 

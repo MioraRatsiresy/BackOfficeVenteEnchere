@@ -54,6 +54,19 @@ public class VenteEnchereFront {
         return map;
     }
 
+    @RequestMapping(value = "/ficheenchere/{id}", method = RequestMethod.GET, produces = "application/json")
+    @ResponseBody
+    @CrossOrigin
+    public Map<String, Object> ficheenchere(@PathVariable int id) {
+        Map<String, Object> map = new HashMap<>();
+        ArrayList<MesEncheres> enchere=mesEncheresRepository.getFicheEnchere(id);
+        for(int i=0;i<enchere.size();i++){
+            enchere.get(i).setPhotos(photo.findByIdEnchere(i));
+        }
+        map.put("fiche",enchere);
+        return map;
+    }
+
     @RequestMapping(value = "/rechercheAvanceFront", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
     @CrossOrigin
