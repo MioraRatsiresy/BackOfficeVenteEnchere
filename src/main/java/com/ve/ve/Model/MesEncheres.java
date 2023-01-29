@@ -5,6 +5,12 @@
  */
 package com.ve.ve.Model;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.ve.ve.Repository.PhotoEnchereRepository;
+
 /**
  *
  * @author Mbola
@@ -190,4 +196,47 @@ public class MesEncheres {
     public void setStatut(String statut) {
         this.statut = statut;
     }
+    private double montant;
+    public double getMontant() {
+        return montant;
+    }
+
+    public void setMontant(double montant) {
+        this.montant = montant;
+    }
+    private String nom;
+    public String getNom() {
+        return nom;
+    }
+
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
+    private String prenom;
+    public String getPrenom() {
+        return prenom;
+    }
+
+    public void setPrenom(String prenom) {
+        this.prenom = prenom;
+    }
+    private Object client;
+
+    public Object getClient() {
+        return client;
+    }
+
+    public void setClient(Object client) {
+        this.client = client;
+    }
+    private List<PhotoEnchere> photos;
+
+    public List<PhotoEnchere> getPhotos() {
+        return photos;
+    }
+
+    public void setPhotos(List<PhotoEnchere> photos) {
+        this.photos = photos;
+    }
+    
 }

@@ -35,7 +35,7 @@ public class VenteEchereMobile {
     private ClientRepository client;
 
     @Autowired
-    private MesEncheresRepository mesEncheresRepositry;
+    private MesEncheresRepository mesEncheresRepository;
 
     // @PostMapping("/token")
     // public String sendPnsToDevice(HttpServletRequest request) {
@@ -94,7 +94,7 @@ public class VenteEchereMobile {
         try {
             Claims cl = tok.testTokenClaims(token);
            // map.put("Status","Succes");
-            map.put("mesEncheres", mesEncheresRepositry.getMesEncheres(id));
+            map.put("mesEncheres", mesEncheresRepository.getMesEncheres(id));
 		} catch (Exception e) {
             e.printStackTrace();
             map.put("Erreur",e.getMessage());

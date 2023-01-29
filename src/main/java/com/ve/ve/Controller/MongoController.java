@@ -1,6 +1,5 @@
 package com.ve.ve.Controller;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.ve.ve.Gestiontoken.GestionToken;
 import com.ve.ve.Model.MiserEnchere;
 import com.ve.ve.Model.PhotoEnchere;
+import com.ve.ve.Repository.EnchereRepository;
 import com.ve.ve.Repository.MiserEnchereRepository;
 import com.ve.ve.Repository.PhotoEnchereRepository;
 
@@ -30,8 +30,7 @@ public class MongoController {
     private PhotoEnchereRepository photo;
 
     @Autowired
-    private MiserEnchereRepository miser;
-    
+    private EnchereRepository enchere;
     @RequestMapping(value = "/insertPhoto/{id}/{token}", method = RequestMethod.POST,produces = "application/json")
     @ResponseBody
     @CrossOrigin
@@ -61,11 +60,10 @@ public class MongoController {
         me.setIdEnchere(id);
         me.setIdclient(Integer.parseInt(request.getParameter("idclient")));
         me.setMontant(Double.parseDouble(request.getParameter("montant")));
-        me.setDateheure(request.getParameter("dateheure"));
         GestionToken tok = new GestionToken();
         try {
             Claims cl = tok.testTokenClaims(token);
-            miser.save(me);
+            enchere.rencherir(me);
             map.put("Status","Insertion avec succes");
         }
         catch(Exception e){
@@ -74,11 +72,11 @@ public class MongoController {
         return map;
     }
 
-    @RequestMapping(value = "/liste", method = RequestMethod.GET,produces = "application/json")
+    @RequestMapping(value = "/getPhotoEnchere/{id}", method = RequestMethod.GET,produces = "application/json")
     @ResponseBody
     @CrossOrigin
-    public List<PhotoEnchere> liste() {
-       return photo.findAll();
+    public List<PhotoEnchere> getPhoto(@PathVariable int id) {
+       return photo.findByIdEnchere(id);
     }
 
  

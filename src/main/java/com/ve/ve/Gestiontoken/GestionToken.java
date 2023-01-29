@@ -60,6 +60,5 @@ public class GestionToken {
       throw new Exception("Token Invalid");
     }
     return cl;
-
   }
 }
