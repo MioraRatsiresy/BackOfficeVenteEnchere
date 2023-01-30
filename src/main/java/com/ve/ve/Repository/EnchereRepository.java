@@ -40,6 +40,7 @@ public class EnchereRepository implements EnchereDAO{
     @Override
     public void insertEnchere(Enchere enchere) {
         String sql="INSERT INTO enchere values (default,'"+enchere.getProduit()+"','"+enchere.getLibelle()+"',current_timestamp,'"+enchere.getPrixMin()+"','"+enchere.getDuree()+"','"+enchere.getEtat()+"','"+enchere.getIdclient()+"')";
+        System.out.println(sql);
         jdbcTemplate.update(sql);
         
     }

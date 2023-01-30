@@ -13,22 +13,32 @@ import com.ve.ve.Model.Enchere;
 import com.ve.ve.Model.MesEncheres;
 
 @Repository
-public class MesEncheresRepository implements MesEncheresDAO{
+public class MesEncheresRepository implements MesEncheresDAO {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
     @Override
     public ArrayList<MesEncheres> getListeEnchere() {
         String sql = "select * from getInfoEnchere()";
-        return (ArrayList<MesEncheres>) jdbcTemplate.query(sql,new BeanPropertyRowMapper<MesEncheres>(MesEncheres.class));
+        return (ArrayList<MesEncheres>) jdbcTemplate.query(sql,
+                new BeanPropertyRowMapper<MesEncheres>(MesEncheres.class));
 
     }
 
     @Override
     public ArrayList<MesEncheres> getMesEncheres(int id) {
-        String sql = "select * from getInfoEnchere() where idclient="+id;
-        System.out.println("Requete : "+sql);
-        return (ArrayList<MesEncheres>) jdbcTemplate.query(sql,new BeanPropertyRowMapper<MesEncheres>(MesEncheres.class));
+        String sql = "select * from getInfoEnchere() where idclient=" + id;
+        System.out.println("Requete : " + sql);
+        return (ArrayList<MesEncheres>) jdbcTemplate.query(sql,
+                new BeanPropertyRowMapper<MesEncheres>(MesEncheres.class));
+    }
+
+    @Override
+    public ArrayList<MesEncheres> getInfoEnchere(int idEnchere) {
+        String sql = "select * from getInfoEnchere() where idenchere=" + idEnchere;
+        System.out.println("Requete : " + sql);
+        return (ArrayList<MesEncheres>) jdbcTemplate.query(sql,
+                new BeanPropertyRowMapper<MesEncheres>(MesEncheres.class));
     }
 
 }

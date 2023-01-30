@@ -23,7 +23,6 @@ import com.ve.ve.Repository.PhotoEnchereRepository;
 
 import io.jsonwebtoken.Claims;
 
-
 @Controller
 public class MongoController {
     @Autowired
@@ -31,32 +30,33 @@ public class MongoController {
 
     @Autowired
     private EnchereRepository enchere;
-    @RequestMapping(value = "/insertPhoto/{id}/{token}", method = RequestMethod.POST,produces = "application/json")
+
+    @RequestMapping(value = "/insertPhoto/{id}/{token}", method = RequestMethod.POST, produces = "application/json")
     @ResponseBody
     @CrossOrigin
-    public Map<String,Object> insertPhoto(@PathVariable int id,HttpServletRequest request, @PathVariable String token) {
-        Map<String,Object> map=new HashMap<>();
-        PhotoEnchere photoenchere=new PhotoEnchere();
+    public Map<String, Object> insertPhoto(@PathVariable int id, HttpServletRequest request,
+            @PathVariable String token) {
+        Map<String, Object> map = new HashMap<>();
+        PhotoEnchere photoenchere = new PhotoEnchere();
         photoenchere.setIdEnchere(id);
         photoenchere.setPhoto(request.getParameter("photo"));
         GestionToken tok = new GestionToken();
         try {
             Claims cl = tok.testTokenClaims(token);
             photo.save(photoenchere);
-            map.put("Status","Insertion avec succes");
-        }
-        catch(Exception e){
-            map.put("Erreur",e.getMessage());
+            map.put("Status", "Insertion avec succes");
+        } catch (Exception e) {
+            map.put("Erreur", e.getMessage());
         }
         return map;
     }
 
-    @RequestMapping(value = "/miser/{id}/{token}", method = RequestMethod.POST,produces = "application/json")
+    @RequestMapping(value = "/miser/{id}/{token}", method = RequestMethod.POST, produces = "application/json")
     @ResponseBody
     @CrossOrigin
-    public Map<String,Object> miser(@PathVariable int id,HttpServletRequest request, @PathVariable String token) {
-        Map<String,Object> map=new HashMap<>();
-        MiserEnchere me=new MiserEnchere();
+    public Map<String, Object> miser(@PathVariable int id, HttpServletRequest request, @PathVariable String token) {
+        Map<String, Object> map = new HashMap<>();
+        MiserEnchere me = new MiserEnchere();
         me.setIdEnchere(id);
         me.setIdclient(Integer.parseInt(request.getParameter("idclient")));
         me.setMontant(Double.parseDouble(request.getParameter("montant")));
@@ -64,21 +64,20 @@ public class MongoController {
         try {
             Claims cl = tok.testTokenClaims(token);
             enchere.rencherir(me);
-            map.put("Status","Insertion avec succes");
-        }
-        catch(Exception e){
-            map.put("Erreur",e.getMessage());
+            map.put("Status", "Insertion avec succes");
+        } catch (Exception e) {
+            map.put("Erreur", e.getMessage());
         }
         return map;
     }
 
-    @RequestMapping(value = "/getPhotoEnchere/{id}", method = RequestMethod.GET,produces = "application/json")
+    @RequestMapping(value = "/getPhotoEnchere/{id}", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
     @CrossOrigin
-    public List<PhotoEnchere> getPhoto(@PathVariable int id) {
-       return photo.findByIdEnchere(id);
+    public Map<String, Object> getPhoto(@PathVariable int id) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("photo", photo.findByIdEnchere(id));
+        return map;
     }
-
- 
 
 }
