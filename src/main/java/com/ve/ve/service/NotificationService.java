@@ -19,7 +19,7 @@ import java.io.IOException;
 @Service
 public class NotificationService {
 
-    @Value("${app.firebase-config}")
+    /*@Value("${app.firebase-config}")
     private String firebaseConfig;
 
     private FirebaseApp firebaseApp;
@@ -92,5 +92,5 @@ public class NotificationService {
         }
 
         return response;
-    }
+    }*/
 }

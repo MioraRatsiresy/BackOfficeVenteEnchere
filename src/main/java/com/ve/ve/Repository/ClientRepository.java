@@ -41,5 +41,11 @@ public class ClientRepository implements ClientDAO{
         jdbcTemplate.update(sql);
         
     }
+
+    @Override
+    public ArrayList<Client> getClientById(int idClient) {
+        String sql = "select * from client where id="+idClient;
+        return (ArrayList<Client>) jdbcTemplate.query(sql, new BeanPropertyRowMapper<Client>(Client.class));
+    }
     
 }

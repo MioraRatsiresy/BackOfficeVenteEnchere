@@ -77,6 +77,7 @@ public class VenteEnchereFront {
     @CrossOrigin
     public Map<String, Object> rechercheAvance(HttpServletRequest request) {
         Map<String, Object> map = new HashMap<>();
+        System.out.println("Search : "+request.getParameter("search"));
         map.put("enchere", enchereRepository.searchEnchere(request.getParameter("search")));
         return map;
     }

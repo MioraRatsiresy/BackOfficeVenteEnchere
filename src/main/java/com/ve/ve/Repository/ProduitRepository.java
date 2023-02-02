@@ -34,5 +34,4 @@ public class ProduitRepository implements ProduitDAO {
         return (ArrayList<Produit>) jdbcTemplate.query(sql, new BeanPropertyRowMapper<Produit>(Produit.class));
 	}
 
-
 }
