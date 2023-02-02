@@ -221,6 +221,9 @@ INSERT INTO Enchere( produit, libelle, dateHeure, prixMin, duree, etat,idclient)
 INSERT INTO Enchere( produit, libelle, dateHeure, prixMin, duree, etat,idclient) VALUES ( 7, 'Violon', '2023-01-28 11:25:00', 5000, 4, '7',2);
 INSERT INTO Enchere( produit, libelle, dateHeure, prixMin, duree, etat,idclient) VALUES ( 32, 'Lego', '2023-01-20 17:30:00', 25000, 10, '0',2);
 INSERT INTO Enchere( produit, libelle, dateHeure, prixMin, duree, etat,idclient) VALUES ( 4, 'Appareil electromenager', '2023-01-28 11:35:00', 3000000, 1, '0',1);
+INSERT INTO Enchere( produit, libelle, dateHeure, prixMin, duree, etat,idclient) VALUES ( 9, 'Canape a 2 places', '2023-01-31 22:17:00', 45000, 1, '0',1);
+
+INSERT INTO Enchere( produit, libelle, dateHeure, prixMin, duree, etat,idclient) VALUES ( 9, 'Nounours', '2023-01-31 22:29:00', 45000, 1, '0',1);
 
 -- INSERT INTO MiserENchere VALUES (1,1,20000,'2023-01-13 16:30');
 -- INSERT INTO MiserENchere VALUES (2,1,50000,'2023-01-13 16:35');
@@ -345,7 +348,7 @@ BEGIN
         IF current_timestamp between statutEnchere.dateHeure and statutEnchere.dateFin then
             RAISE NOTICE 'Tokn en cours';
             statut:='En cours';
-        ELSE
+        ELSIF current_timestamp>statutEnchere.dateFin then 
             if statutEnchere.etat='0' then
                 IF statutEnchere.client is not null then
                     RAISE NOTICE 'Ato isika';
@@ -367,6 +370,8 @@ BEGIN
             statut:='Termine'; 
             EXECUTE format('UPDATE enchere SET etat =''7'' WHERE id='||statutEnchere.id);
             -- EXECUTE format('UPDATE enchere SET etat = ''7'' WHERE dateheure<=current_timestamp and current_timestamp<=dateheure+interval ''1 day''*duree');
+        ELSE
+            statut:='Pas encore ouvert';
         END IF;
         idEnchere:=statutEnchere.id;
         produit:=statutEnchere.produit;

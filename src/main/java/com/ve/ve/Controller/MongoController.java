@@ -68,7 +68,7 @@ public class MongoController {
             map.put("Status","Insertion avec succes");
             }
             else{
-                map.put("Compte", "Solde insuffisante pour cette transaction");
+                map.put("Compte", "Solde insuffisant pour cette transaction");
             }
         }
         catch(Exception e){
