@@ -15,7 +15,7 @@ import com.ve.ve.service.NotificationService;
 @RequestMapping("/notification")
 public class NotificationController {
 
-    @Autowired
+    /*@Autowired
     private NotificationService notificationService;
 
     @PostMapping("/subscribe")
@@ -36,5 +36,5 @@ public class NotificationController {
     @PostMapping("/topic")
     public String sendPnsToTopic(@RequestBody NotificationRequestDto notificationRequestDto) {
         return notificationService.sendPnsToTopic(notificationRequestDto);
-    }
+    }*/
 }

@@ -34,11 +34,4 @@ public class ProduitRepository implements ProduitDAO {
         return (ArrayList<Produit>) jdbcTemplate.query(sql, new BeanPropertyRowMapper<Produit>(Produit.class));
 	}
 
-
-    @Override
-	public ArrayList<Produit> getProduitByCategorie(int idCategorie) {
-		String sql = "select * from produit where categorie="+idCategorie;
-        return (ArrayList<Produit>) jdbcTemplate.query(sql, new BeanPropertyRowMapper<Produit>(Produit.class));
-	}
-
 }

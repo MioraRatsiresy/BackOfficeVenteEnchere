@@ -21,7 +21,8 @@ public class CompteClientRepository implements CompteClientDAO {
 
     @Override
     public ArrayList<SoldeClient> getSolde(int idClient) {
-        String sql = "select clientid, sum(montant) as solde from compteclient where etat=0 and clientid=1 and actiontransaction=4 or etat=3 and clientid=1 and actiontransaction=4 group by clientid";
+        //String sql = "select clientid, sum(montant) as solde from compteclient where etat=0 and clientid=1 and actiontransaction=4 or etat=3 and clientid=1 and actiontransaction=4 group by clientid";
+        String sql = "select id, solde from SoldeClient where id="+idClient;
         return (ArrayList<SoldeClient>) jdbcTemplate.query(sql,
                 new BeanPropertyRowMapper<SoldeClient>(SoldeClient.class));
     }
