@@ -16,10 +16,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ve.ve.Model.Enchere;
+import com.ve.ve.Model.EncherePlafond;
 import com.ve.ve.Model.MesEncheres;
 import com.ve.ve.Gestiontoken.GestionToken;
 import com.ve.ve.Model.Client;
 import com.ve.ve.Repository.ClientRepository;
+import com.ve.ve.Repository.EncherePlafondRepository;
 import com.ve.ve.Repository.EnchereRepository;
 import com.ve.ve.Repository.MesEncheresRepository;
 import com.ve.ve.Repository.PhotoEnchereRepository;
@@ -40,6 +42,9 @@ public class VenteEnchereFront {
 
     @Autowired
     private PhotoEnchereRepository photo;
+
+    @Autowired
+    private EncherePlafondRepository plafond;
 
     @RequestMapping(value = "/listeEnchereFront", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
@@ -173,4 +178,32 @@ public class VenteEnchereFront {
         return map;
     }
 
+
+    @RequestMapping(value = "/enchereplafond/{idenchere}" , method = RequestMethod.GET,produces="application/json")
+	@ResponseBody
+    @CrossOrigin
+    public Map<String,Object> enchereplafond(HttpServletRequest request,@PathVariable int idenchere){
+        Map<String,Object> map=new HashMap<>();
+        map.put("plafond", plafond.getEncherePlafond(Integer.parseInt(request.getParameter("idclient")),idenchere));
+        return map;
+    }
+
+    @RequestMapping(value = "/insertenchereplafond/{idenchere}" , method = RequestMethod.POST,produces="application/json")
+	@ResponseBody
+    @CrossOrigin
+    public Map<String,Object> insertenchereplafond(HttpServletRequest request,@PathVariable int idenchere){
+        Map<String,Object> map=new HashMap<>();
+        EncherePlafond ench=new EncherePlafond();
+        if(enchereRepository.verifyCompte(Integer.parseInt(request.getParameter("idclient")),Double.parseDouble(request.getParameter("montant")))){
+        ench.setMontant(Double.parseDouble(request.getParameter("montant")));
+        ench.setIntervalle(Double.parseDouble(request.getParameter("intervalle")));
+        ench.setIdEnchere(idenchere);
+        ench.setIdClient(Integer.parseInt(request.getParameter("idclient")));
+        plafond.insertPlafond(ench);            
+        }
+        else{
+            map.put("Erreur","Solde insuffisant");
+        }
+        return map;
+    }
 }

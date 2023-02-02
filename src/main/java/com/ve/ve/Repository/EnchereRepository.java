@@ -50,10 +50,11 @@ public class EnchereRepository implements EnchereDAO{
         return (Object) jdbcTemplate.query(sql,new BeanPropertyRowMapper<Object>(Object.class));
     }
 
-    public boolean verifyCompte(MiserEnchere miser){
-        String sql = "select * from soldeclient where id="+miser.getIdclient();
+    public boolean verifyCompte(int idClient,double montant){
+        String sql = "select * from soldeclient where id="+idClient;
+        System.out.println(sql);
         ArrayList<SoldeClient> cl= (ArrayList<SoldeClient>) jdbcTemplate.query(sql,new BeanPropertyRowMapper<SoldeClient>(SoldeClient.class));
-        if(miser.getMontant()<=cl.get(0).getSolde()){
+        if(montant<=cl.get(0).getSolde()){
             return true;
         }
         return false;

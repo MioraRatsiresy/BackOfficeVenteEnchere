@@ -217,6 +217,7 @@ INSERT INTO Client(id, nom, prenom, contact, identifiant, pwd) VALUES (default, 
 INSERT INTO Client(id, nom, prenom, contact, identifiant, pwd) VALUES (default, 'Andrianiony', 'Miharizo Kanto', '0345162879', 'Kanto', 'c33a17d4a2729f26fbd86d67dcf3e97b');
 INSERT INTO CompteClient(montant, etat, Clientid,actionTransaction) VALUES (100000, 3, 1,4);
 INSERT INTO CompteClient(montant, etat, Clientid,actionTransaction) VALUES (200000, 3, 2,4);
+INSERT INTO CompteClient(montant, etat, Clientid,actionTransaction) VALUES (200000, 3, 1,4);
 INSERT INTO Enchere( produit, libelle, dateHeure, prixMin, duree, etat,idclient) VALUES ( 1, 'Bac a litiere', '2023-01-28 11:30:00', 10000, 1, '0',1);
 INSERT INTO Enchere( produit, libelle, dateHeure, prixMin, duree, etat,idclient) VALUES ( 7, 'Violon', '2023-01-28 11:25:00', 5000, 4, '7',2);
 INSERT INTO Enchere( produit, libelle, dateHeure, prixMin, duree, etat,idclient) VALUES ( 32, 'Lego', '2023-01-20 17:30:00', 25000, 10, '0',2);
@@ -225,6 +226,10 @@ INSERT INTO Enchere( produit, libelle, dateHeure, prixMin, duree, etat,idclient)
 
 INSERT INTO Enchere( produit, libelle, dateHeure, prixMin, duree, etat,idclient) VALUES ( 9, 'Nounours', '2023-01-31 22:29:00', 45000, 1, '0',1);
 
+INSERT INTO Enchere( produit, libelle, dateHeure, prixMin, duree, etat,idclient) VALUES ( 10, 'Ordinateur', '2023-02-02 11:56:00', 45000, 1, '0',1);
+
+
+INSERT INTO Enchere( produit, libelle, dateHeure, prixMin, duree, etat,idclient) VALUES ( 10, 'Stylo', '2023-02-02 11:59:00', 45000, 1, '0',1);
 -- INSERT INTO MiserENchere VALUES (1,1,20000,'2023-01-13 16:30');
 -- INSERT INTO MiserENchere VALUES (2,1,50000,'2023-01-13 16:35');
 -- INSERT INTO MiserENchere VALUES (4,2,5000000,'2023-01-29 09:35');

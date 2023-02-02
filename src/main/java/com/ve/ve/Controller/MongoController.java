@@ -73,7 +73,7 @@ public class MongoController {
         GestionToken tok = new GestionToken();
         try {
             Claims cl = tok.testTokenClaims(token);
-            if (enchere.verifyCompte(me)) {
+            if (enchere.verifyCompte(me.getIdclient(),me.getMontant())) {
                 enchere.rencherir(me);
                 map.put("Status", "Insertion avec succes");
             } else {
