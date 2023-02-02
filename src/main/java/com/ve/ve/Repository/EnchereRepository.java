@@ -57,4 +57,10 @@ public class EnchereRepository implements EnchereDAO{
         this.maxmontant(miser);
         
     }
+
+    public int getIdDernierEnchereInsere(int idClient){
+        String sql="select max(id) from enchere where idClient='"+idClient+"'";
+        return jdbcTemplate.queryForObject( sql, Integer.class);
+    }
+
 }

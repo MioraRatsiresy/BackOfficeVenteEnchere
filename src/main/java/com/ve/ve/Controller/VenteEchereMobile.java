@@ -29,7 +29,7 @@ public class VenteEchereMobile {
     @Autowired
     private AdminLoginRepository user;
 
-    @Autowired 
+    @Autowired
     private CategorieRepository categorie;
 
     @Autowired
@@ -38,70 +38,71 @@ public class VenteEchereMobile {
     @Autowired
     private MesEncheresRepository mesEncheresRepository;
 
-    @Autowired 
+    @Autowired
     private ProduitRepository produitRepository;
 
     // @PostMapping("/token")
     // public String sendPnsToDevice(HttpServletRequest request) {
-    //     MessageNotification msg=new MessageNotification();
-    //     msg.setBody(request.getParameter("body"));
-    //     msg.setTarget(request.getParameter("target"));
-    //     msg.setTitle(request.getParameter("title"));
-    //     return this.sendPnsToDevice(msg);
+    // MessageNotification msg=new MessageNotification();
+    // msg.setBody(request.getParameter("body"));
+    // msg.setTarget(request.getParameter("target"));
+    // msg.setTitle(request.getParameter("title"));
+    // return this.sendPnsToDevice(msg);
     // }
     // public String sendPnsToDevice(MessageNotification notificationRequestDto) {
-    //     Message message = Message.builder()
-    //             .setToken(notificationRequestDto.getTarget())
-    //             .setNotification(new Notification(notificationRequestDto.getTitle(), notificationRequestDto.getBody()))
-    //             .putData("content", notificationRequestDto.getTitle())
-    //             .putData("body", notificationRequestDto.getBody())
-    //             .build();
+    // Message message = Message.builder()
+    // .setToken(notificationRequestDto.getTarget())
+    // .setNotification(new Notification(notificationRequestDto.getTitle(),
+    // notificationRequestDto.getBody()))
+    // .putData("content", notificationRequestDto.getTitle())
+    // .putData("body", notificationRequestDto.getBody())
+    // .build();
 
-    //     String response = null;
-    //     try {
-    //         response = FirebaseMessaging.getInstance().send(message);
-    //     } catch (FirebaseMessagingException e) {
-    //         System.out.println("Fail to send firebase notification"+e);
-    //     }
+    // String response = null;
+    // try {
+    // response = FirebaseMessaging.getInstance().send(message);
+    // } catch (FirebaseMessagingException e) {
+    // System.out.println("Fail to send firebase notification"+e);
+    // }
 
-    //     return response;
+    // return response;
     // }
     @RequestMapping(value = "/rechargermoncompte/{id}/{token}", method = RequestMethod.POST, produces = "application/json")
     @ResponseBody
     @CrossOrigin
-    public void insertEnchere(HttpServletRequest request,@PathVariable int id, @PathVariable String token) {
-        Map<String,Object> map=new HashMap<>();
-        CompteClient compte=new CompteClient();
+    public void insertEnchere(HttpServletRequest request, @PathVariable int id, @PathVariable String token) {
+        Map<String, Object> map = new HashMap<>();
+        CompteClient compte = new CompteClient();
         compte.setClientid(id);
         compte.setMontant(Double.parseDouble(request.getParameter("montant")));
         compte.setEtat(0);
         compte.setActionTransaction(4);
         GestionToken tok = new GestionToken();
-        System.out.println("TOKEN : "+token);
+        System.out.println("TOKEN : " + token);
         try {
             Claims cl = tok.testTokenClaims(token);
             client.rechargerMonCompte(compte);
-            map.put("message","Rechargment du compte avec succes");
-            map.put("Status","Succes");
-        }
-        catch(Exception e){
-            map.put("Erreur","Erreur");
+            map.put("message", "Rechargment du compte avec succes");
+            map.put("Status", "Succes");
+        } catch (Exception e) {
+            map.put("Erreur", "Erreur");
         }
     }
 
     @RequestMapping(value = "/listeMesEncheres/{id}/{token}", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
     @CrossOrigin
-    public Map<String, Object> listeMesEncheres(HttpServletRequest request, @PathVariable int id, @PathVariable String token){
+    public Map<String, Object> listeMesEncheres(HttpServletRequest request, @PathVariable int id,
+            @PathVariable String token) {
         Map<String, Object> map = new HashMap<>();
         GestionToken tok = new GestionToken();
         try {
             Claims cl = tok.testTokenClaims(token);
-           // map.put("Status","Succes");
+            // map.put("Status","Succes");
             map.put("mesEncheres", mesEncheresRepository.getMesEncheres(id));
-		} catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
-            map.put("Erreur",e.getMessage());
+            map.put("Erreur", e.getMessage());
         }
         return map;
     }
@@ -109,16 +110,18 @@ public class VenteEchereMobile {
     @RequestMapping(value = "/infoEnchere/{id}/{token}", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
     @CrossOrigin
-    public Map<String, Object> infoEnchere(HttpServletRequest request, @PathVariable int id, @PathVariable String token){
+    public Map<String, Object> infoEnchere(HttpServletRequest request, @PathVariable int id,
+            @PathVariable String token) {
         Map<String, Object> map = new HashMap<>();
         GestionToken tok = new GestionToken();
         try {
             Claims cl = tok.testTokenClaims(token);
-           // map.put("Status","Succes");
+            // map.put("Status","Succes");
             map.put("infoEnchere", mesEncheresRepository.getInfoEnchere(id));
-		} catch (Exception e) {
+            System.out.println("Token : " + token);
+        } catch (Exception e) {
             e.printStackTrace();
-            map.put("Erreur",e.getMessage());
+            map.put("Erreur", e.getMessage());
         }
         return map;
     }
@@ -126,13 +129,30 @@ public class VenteEchereMobile {
     @RequestMapping(value = "/getProduitByCategorie/{id}", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
     @CrossOrigin
-    public Map<String, Object> getProduitByCategorie(HttpServletRequest request, @PathVariable int id){
+    public Map<String, Object> getProduitByCategorie(HttpServletRequest request, @PathVariable int id) {
         Map<String, Object> map = new HashMap<>();
         try {
             map.put("produit", produitRepository.getProduitByCategorie(id));
-		} catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
-            map.put("Erreur",e.getMessage());
+            map.put("Erreur", e.getMessage());
+        }
+        return map;
+    }
+
+    @RequestMapping(value = "/getClientById/{id}/{token}", method = RequestMethod.GET, produces = "application/json")
+    @ResponseBody
+    @CrossOrigin
+    public Map<String, Object> getClientById(HttpServletRequest request, @PathVariable int id,
+            @PathVariable String token) {
+        Map<String, Object> map = new HashMap<>();
+        GestionToken tok = new GestionToken();
+        try {
+            Claims cl = tok.testTokenClaims(token);
+            map.put("client", client.getClientById(id));
+        } catch (Exception e) {
+            e.printStackTrace();
+            map.put("Erreur", e.getMessage());
         }
         return map;
     }

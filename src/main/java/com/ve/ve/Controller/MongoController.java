@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import com.ve.ve.Gestiontoken.GestionToken;
 import com.ve.ve.Model.MiserEnchere;
@@ -34,16 +35,22 @@ public class MongoController {
     @RequestMapping(value = "/insertPhoto/{id}/{token}", method = RequestMethod.POST, produces = "application/json")
     @ResponseBody
     @CrossOrigin
-    public Map<String, Object> insertPhoto(@PathVariable int id, HttpServletRequest request,
+    public Map<String, Object> insertPhoto(@RequestBody String photos, @PathVariable int id, HttpServletRequest request,
             @PathVariable String token) {
         Map<String, Object> map = new HashMap<>();
         PhotoEnchere photoenchere = new PhotoEnchere();
-        photoenchere.setIdEnchere(id);
-        photoenchere.setPhoto(request.getParameter("photo"));
+        int idEnchere = enchere.getIdDernierEnchereInsere(id);
+        System.out.println("Id enchere: " + idEnchere);
+        photoenchere.setIdEnchere(idEnchere);
+        //System.out.println("Sarisary: "+photos);
+        photoenchere.setPhoto(photos.split("data:image/png;base64,")[1]);
         GestionToken tok = new GestionToken();
         try {
             Claims cl = tok.testTokenClaims(token);
-            photo.save(photoenchere);
+            photo.insert(photoenchere);
+            System.out.println("Token : " + token);
+            System.out.println("Image en base 64 lol : " + photo);
+            System.out.println("ok");
             map.put("Status", "Insertion avec succes");
         } catch (Exception e) {
             map.put("Erreur", e.getMessage());

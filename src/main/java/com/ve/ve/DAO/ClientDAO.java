@@ -14,6 +14,7 @@ public interface ClientDAO {
 
     void rechargerMonCompte(CompteClient compte);
 
+    ArrayList<Client> getClientById(int idClient);
 
 
 }
