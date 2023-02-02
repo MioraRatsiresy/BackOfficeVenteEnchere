@@ -1,5 +1,6 @@
 package com.ve.ve.Model;
 
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
   
@@ -8,9 +9,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 // Class
 public class PhotoEnchere {
   
-    // Attributes
-    @Id
-    private int _id;
     private int idEnchere;
     public int getIdEnchere() {
         return idEnchere;
