@@ -1,6 +1,6 @@
 package com.ve.ve.Model;
 
-public class Client {
+public class SoldeClient {
     private int id;
     public int getId() {
         return id;
@@ -29,18 +29,18 @@ public class Client {
     public void setContact(String contact) {
         this.contact = contact;
     }
-    private String identifiant;
-    public String getIdentifiant() {
-        return identifiant;
+    private double argentbloque;
+    public double getArgentbloque() {
+        return argentbloque;
     }
-    public void setIdentifiant(String identifiant) {
-        this.identifiant = identifiant;
+    public void setArgentbloque(double argentbloque) {
+        this.argentbloque = argentbloque;
     }
-    private String pwd;
-    public String getPwd() {
-        return pwd;
+    private double solde;
+    public double getSolde() {
+        return solde;
     }
-    public void setPwd(String pwd) {
-        this.pwd = pwd;
+    public void setSolde(double solde) {
+        this.solde = solde;
     }
 }

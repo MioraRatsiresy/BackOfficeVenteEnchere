@@ -1,13 +1,6 @@
 package com.ve.ve.Model;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-
-@Document(collection = "MiserEnchere")
 public class MiserEnchere {
-      // Attributes
-      @Id
-      private int _id;
       private int idEnchere;
       public int getIdEnchere() {
           return idEnchere;

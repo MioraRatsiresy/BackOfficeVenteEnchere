@@ -67,7 +67,8 @@ CREATE TABLE CompteClient (
     montant float8 NOT NULL,
     etat int4 default 0 NOT NULL, --0 en cours //3 validé // 8 refusé
     Clientid int4 NOT NULL, 
-    actionTransaction int default 0 --0 debit --4 credit
+    actionTransaction int default 0, --0 debit --4 credit -- 6 vente 
+    PRIMARY KEY(id)
 );
 
 ALTER TABLE CompteClient ADD FOREIGN KEY(Clientid) REFERENCES Client(id);
@@ -87,11 +88,27 @@ CREATE TABLE Enchere (
 ALTER TABLE Enchere ADD FOREIGN KEY(produit) REFERENCES Produit(id);
 ALTER TABLE Enchere ADD FOREIGN KEY(idclient) REFERENCES Client(id);
 
-----VIEW
-CREATE VIEW EnchereDetail as 
-SELECT Enchere.*,Produit.produit as produitEnchere,Categorie.categorie
-from Enchere join Produit on Produit.id=Enchere.produit join Categorie on Categorie.id=Produit.categorie;
 
+CREATE TABLE MiserEnchere (
+    idclient int4 NOT NULL,
+    idEnchere int,
+    montant double precision,
+    dateheure timestamp default current_timestamp,
+    FOREIGN KEY(idclient) REFERENCES Client(id),
+    FOREIGN KEY(idEnchere) REFERENCES Enchere(id)
+);
+
+
+create table enchereplafond(
+    idClient int,
+    idEnchere int,
+    montant int,
+    intervalle double precision,
+    FOREIGN KEY(idClient) REFERENCES Client(id),
+    FOREIGN KEY(idEnchere) REFERENCES Enchere(id)
+);
+
+INSERT INTO enchereplafond VALUES (1,3,100000,50);
 -- ALTER TABLE EnchereAdmin ADD CONSTRAINT FKEnchereAdm945139 FOREIGN KEY (Categorieid) REFERENCES Categorie (id);
 -- ALTER TABLE EtatCategorie ADD CONSTRAINT FKEtatCatego274392 FOREIGN KEY (Categorieid) REFERENCES Categorie (id);
 -- ALTER TABLE EtatCategorie ADD CONSTRAINT FKEtatCatego52731 FOREIGN KEY (etatid) REFERENCES etat (id);
@@ -149,7 +166,6 @@ INSERT INTO Produit(id, Produit, categorie) VALUES (default, 'Peluche doudous', 
 INSERT INTO Produit(id, Produit, categorie) VALUES (default, 'Equipements pour bebe', 10);
 INSERT INTO Produit(id, Produit, categorie) VALUES (default, 'Equipements de securite', 10);
 INSERT INTO Produit(id, Produit, categorie) VALUES (default, 'Autres', 10);
-INSERT INTO EnchereAdmin(id, Categorieid, duree) VALUES (default, 1, 2);
 INSERT INTO EnchereAdmin(id, Categorieid, duree) VALUES (default, 2, 3);
 INSERT INTO EnchereAdmin(id, Categorieid, duree) VALUES (default, 3, 1);
 INSERT INTO EnchereAdmin(id, Categorieid, duree) VALUES (default, 4, 4);
@@ -199,24 +215,32 @@ INSERT INTO EtatCategorie(Categorieid, etatid) VALUES (10, 1);
 INSERT INTO Commission(id, pourcentage) VALUES (1, 5);
 INSERT INTO Client(id, nom, prenom, contact, identifiant, pwd) VALUES (default, 'Andrianasolonavalona', 'Mbolatiana Liliane', '0382069125', 'Mbola', '8b3cc7deb981e42cbec867c8fd44a5ec');
 INSERT INTO Client(id, nom, prenom, contact, identifiant, pwd) VALUES (default, 'Andrianiony', 'Miharizo Kanto', '0345162879', 'Kanto', 'c33a17d4a2729f26fbd86d67dcf3e97b');
-INSERT INTO CompteClient(montant, etat, Clientid,actionTransaction) VALUES (250000, 0, 1,0);
-INSERT INTO CompteClient(montant, etat, Clientid,actionTransaction) VALUES (100000, 0, 1,4);
-INSERT INTO CompteClient(montant, etat, Clientid,actionTransaction) VALUES (20000, 1, 2,0);
-INSERT INTO Enchere( produit, libelle, dateHeure, prixMin, duree, etat,idclient) VALUES ( 1, 'Bac a litiere', '2023-01-13 15:23:00', 10000, 1, '0',1);
-INSERT INTO Enchere( produit, libelle, dateHeure, prixMin, duree, etat,idclient) VALUES ( 7, 'Violon', '2023-01-13 15:30:00', 5000, 4, '7',2);
+INSERT INTO CompteClient(montant, etat, Clientid,actionTransaction) VALUES (100000, 3, 1,4);
+INSERT INTO CompteClient(montant, etat, Clientid,actionTransaction) VALUES (200000, 3, 2,4);
+INSERT INTO Enchere( produit, libelle, dateHeure, prixMin, duree, etat,idclient) VALUES ( 1, 'Bac a litiere', '2023-01-28 11:30:00', 10000, 1, '0',1);
+INSERT INTO Enchere( produit, libelle, dateHeure, prixMin, duree, etat,idclient) VALUES ( 7, 'Violon', '2023-01-28 11:25:00', 5000, 4, '7',2);
+INSERT INTO Enchere( produit, libelle, dateHeure, prixMin, duree, etat,idclient) VALUES ( 32, 'Lego', '2023-01-20 17:30:00', 25000, 10, '0',2);
+INSERT INTO Enchere( produit, libelle, dateHeure, prixMin, duree, etat,idclient) VALUES ( 4, 'Appareil electromenager', '2023-01-28 11:35:00', 3000000, 1, '0',1);
+INSERT INTO Enchere( produit, libelle, dateHeure, prixMin, duree, etat,idclient) VALUES ( 9, 'Canape a 2 places', '2023-01-31 22:17:00', 45000, 1, '0',1);
 
+INSERT INTO Enchere( produit, libelle, dateHeure, prixMin, duree, etat,idclient) VALUES ( 9, 'Nounours', '2023-01-31 22:29:00', 45000, 1, '0',1);
+
+-- INSERT INTO MiserENchere VALUES (1,1,20000,'2023-01-13 16:30');
+-- INSERT INTO MiserENchere VALUES (2,1,50000,'2023-01-13 16:35');
+-- INSERT INTO MiserENchere VALUES (4,2,5000000,'2023-01-29 09:35');
+-- INSERT INTO MiserENchere(idEnchere,idClient,montant) VALUES (3,1,30000);
 --------------------------------------------------------------------------------------------------------
 create table chiffreObtenuSite(
     montant DOUBLE PRECISION,
-    dateObtention date
+    dateObtention date default current_timestamp
 );
 
 
-insert into chiffreObtenuSite VALUES
-(400000,'2022-07-06'),
-(600000,'2022-07-12'),
-(400000,'2022-09-23'),
-(400000,'2022-12-25');
+-- insert into chiffreObtenuSite VALUES
+-- (400000,'2022-07-06'),
+-- (600000,'2022-07-12'),
+-- (400000,'2022-09-23'),
+-- (400000,'2022-12-25');
 
 create table mois(
     id int primary key,
@@ -268,5 +292,140 @@ when m.mois='Decembre' then 12
 end as mois,
 m.mois as nomMois from v_chiffreAffaireMois v right join mois m on m.id=v.mois;
 
-create view v_compteClient as 
-select c.*, concat(cl.nom,cl.prenom) as nomClient, cl.contact from compteclient c join client cl on cl.id=c.clientid;
+create or replace view v_enchereEnCours as 
+select*, dateheure+interval '1 day'*duree as datefin from encheredetail where dateheure<=current_timestamp and current_timestamp<=dateheure+interval '1 day'*duree and etat='0';
+
+
+
+CREATE OR REPLACE VIEW encheretemp as  SELECT Enchere.*,MiserENchere.idclient as client,case when MiserENchere.montant is null then prixMin else MiserENchere.montant end as montant,Client.nom,Client.prenom from Enchere left join miserenchere on miserenchere.idEnchere=enchere.id left  join Client on Client.id=MiserEnchere.idclient;
+
+----VIEW
+CREATE or replace VIEW EnchereDetail as 
+select f.*,Produit.produit as produitEnchere,Categorie.categorie
+from encheretemp f join Produit on Produit.id=f.produit join Categorie on Categorie.id=Produit.categorie  where montant=(select max(montant) from encheretemp where id=f.id);
+
+
+--compte client
+--chiffreaffaire
+
+
+create or replace view v_statutEnchere as 
+select ed.*, 
+dateheure+interval '1 day'*duree as datefin,
+case when etat='0' then 'En cours' when etat='7' then 'Termin&eacute;' end as statut 
+from encheredetail ed;
+
+CREATE or replace FUNCTION getInfoEnchere() RETURNS 
+table(
+    idEnchere int,
+    produit int,
+    libelle text,
+    dateHeure TIMESTAMP,
+    prixMin DOUBLE PRECISION,
+    duree DOUBLE PRECISION,
+    etat VARCHAR(10),
+    idClient int,
+    produitEnchere VARCHAR(50),
+    categorie VARCHAR(50),
+    dateFin TIMESTAMP,
+    statut VARCHAR(20),
+    client int,
+    nom varchar(50),
+    prenom varchar(50),
+    montant double precision
+) language plpgsql AS $$
+DECLARE 
+    statutEnchere record;
+    tab record;
+    id int;
+    volamiditra double precision;
+BEGIN 
+    for statutEnchere in (select*from v_statutenchere)
+    LOOP
+        RAISE NOTICE '%',current_timestamp;
+        RAISE NOTICE '%',statutEnchere.id;
+        volamiditra:=0;
+        IF current_timestamp between statutEnchere.dateHeure and statutEnchere.dateFin then
+            RAISE NOTICE 'Tokn en cours';
+            statut:='En cours';
+        ELSIF current_timestamp>statutEnchere.dateFin then 
+            if statutEnchere.etat='0' then
+                IF statutEnchere.client is not null then
+                    RAISE NOTICE 'Ato isika';
+                    --vola miditra oanle site
+                    EXECUTE format('INSERT INTO chiffreObtenuSite values ('||statutEnchere.montant*(select pourcentage from Commission)/100||',''||now()||'')');
+                    RAISE NOTICE 'Vita iny';
+                    volamiditra:=statutEnchere.montant*(1-((select pourcentage from Commission)/100));
+                    --vola miditra oan tompony
+                    EXECUTE format('INSERT INTO compteclient(montant,etat,clientid,actiontransaction) values ('||volamiditra||',0,'||statutEnchere.idclient||',6)');
+                    RAISE NOTICE 'Vita 2';
+                    --vola miala oanle nividy
+                    EXECUTE format('INSERT INTO compteclient(montant,etat,clientid,actiontransaction) values ('||statutEnchere.montant||',0,'||statutEnchere.client||',0)');
+
+                    RAISE NOTICE 'Vita 3';
+                    RAISE NOTICE 'I:%;II:%,III:%',(statutEnchere.montant*(select pourcentage from Commission)/100),volamiditra,statutEnchere.montant;
+                    --  EXECUTE format('UPDATE enchere SET etat = ''7'' WHERE dateheure<=current_timestamp and current_timestamp<=dateheure+interval ''1 day''*duree');
+                end if;
+            end if;
+            statut:='Termine'; 
+            EXECUTE format('UPDATE enchere SET etat =''7'' WHERE id='||statutEnchere.id);
+            -- EXECUTE format('UPDATE enchere SET etat = ''7'' WHERE dateheure<=current_timestamp and current_timestamp<=dateheure+interval ''1 day''*duree');
+        ELSE
+            statut:='Pas encore ouvert';
+        END IF;
+        idEnchere:=statutEnchere.id;
+        produit:=statutEnchere.produit;
+        libelle:=statutEnchere.libelle;
+        dateHeure:=statutEnchere.dateHeure;
+        prixMin:=statutEnchere.prixMin;
+        duree:=statutEnchere.duree;
+        etat:=statutEnchere.etat;
+        idClient:=statutEnchere.idClient;
+        produitEnchere:=statutEnchere.produitEnchere;
+        categorie:=statutEnchere.categorie;
+        dateFin:=statutEnchere.dateFin;
+        client:=statutEnchere.client;
+        nom:=statutEnchere.nom;
+        prenom:=statutEnchere.prenom;
+        montant:=statutEnchere.montant;
+        return next;
+    END LOOP;    
+END;
+$$;
+
+CREATE or REPLACE VIEW debitClient as SELECT *,case when (SELECT sum(montant) from compteclient where actiontransaction=0 and clientid=client.id) is null then 0 ELSE (SELECT sum(montant) from compteclient where actiontransaction=0 and clientid=client.id) end debit,(select case when sum(montant) is null then 0 else sum(montant) end argentbloque from getInfoENchere() where client=client.id and etat='0') from Client;
+
+
+CREATE or REPLACE VIEW creditClient as SELECT *,case when (SELECT sum(montant) from compteclient where clientid=client.id and ((actiontransaction=4 and etat=3) or actiontransaction=6)) is null then 0 else (SELECT sum(montant) from compteclient where clientid=client.id and ((actiontransaction=4 and etat=3) or actiontransaction=6)) end credit from client;
+
+
+
+Create or REPLACE VIEW SoldeClient as SELECT  Creditclient.id,creditClient.nom,creditClient.prenom,creditClient.contact,argentbloque,credit-(debit+argentbloque) as solde from debitClient join creditClient on creditClient.id=debitClient.id;
+
+--possibilité de mettre un chiffre max
+CREATE or replace FUNCTION montantmax(id int,montant double precision,client int) RETURNS int
+language plpgsql AS $$
+DECLARE 
+    f record;
+    retour int;
+    query text;
+BEGIN 
+    retour:=0;
+    for f in (select * from enchereplafond where idenchere=id and idclient!=client)
+    LOOP
+    query:='';
+    if f.montant>montant and montant+f.intervalle<=f.montant then
+        retour:=retour+1;
+        query:='insert into MiserENchere(idEnchere,idClient,montant) VALUES('||id||','||f.idClient||','||(montant+f.intervalle)||')';
+        EXECUTE query;
+    end if;
+    END LOOP; 
+    return retour;   
+END;
+$$;
+
+--timezone
+set time zone 'UTC-3';
+
+
+

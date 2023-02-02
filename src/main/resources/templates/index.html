@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Lumino - Login</title>
+	<title>Login</title>
 	<link href="assetsTemplate/css/bootstrap.min.css" rel="stylesheet">
 	<link href="assetsTemplate/css/datepicker3.css" rel="stylesheet">
 	<link href="assetsTemplate/css/styles.css" rel="stylesheet">
@@ -12,24 +12,43 @@
 	<script src="js/html5shiv.js"></script>
 	<script src="js/respond.min.js"></script>
 	<![endif]-->
+	<style>
+		/*body{
+			
+			background-color: #778899;
+		}*/
+	</style>
 </head>
 
 <body>
 	<div class="row">
-		<div class="col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-md-4 col-md-offset-4">
-			<div class="login-panel panel panel-default">
-				<div class="panel-heading" style="align:center;">Log in</div>
+		<div class="col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-md-4 col-md-offset-4"
+			style="border-radius: 10% / 50%;">
+			<div class="login-panel panel panel-default" style="margin-top: 80px;">
+				<p>
+					<center style="padding-top: 5px;">
+						<h3>LOGIN</h3>
+					</center>
+					<hr>
+				</p>
 				<div class="panel-body">
-					<b><p id="message" style="color:red;"></p></b>
-					<form role="form">
+					<b>
+						<p id="message" style="color:red;"></p>
+					</b>
+					<form role="form" style="margin-top:-25px;">
 						<fieldset>
 							<div class="form-group">
-								<input id ="email" th:value="Miora" class="form-control" placeholder="Identifiant" name="email" type="text" autofocus="">
+								<label>Nom</label>
+								<input id="email" th:value="Miora" class="form-control" placeholder="Identifiant"
+									name="email" type="text" autofocus="">
 							</div>
 							<div class="form-group">
-								<input id="pwd" th:value="miora" class="form-control" placeholder="Mot de passe" name="password" type="password" value="">
+								<label>Mot de passe</label>
+								<input id="pwd" th:value="miora" class="form-control" placeholder="Mot de passe"
+									name="password" type="password" value="">
 							</div>
-							<button type="button" class="btn btn-primary btn-block" onclick="traitementLogin();">Log in</button>
+							<button type="button" class="btn btn-primary btn-block" onclick="traitementLogin();">Log
+								in</button>
 					</form>
 				</div>
 			</div>

@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -23,11 +25,13 @@ import com.google.gson.JsonObject;
 import com.ve.ve.Model.AdminLogin;
 import com.ve.ve.Model.Categorie;
 import com.ve.ve.Model.Commission;
+import com.ve.ve.Model.EnchereAdmin;
 import com.ve.ve.Model.Produit;
 import com.ve.ve.Model.StatistiqueCategorie;
 import com.ve.ve.Model.StatistiqueChiffreAffaire;
 import com.ve.ve.Repository.AdminLoginRepository;
 import com.ve.ve.Repository.CategorieRepository;
+import com.ve.ve.Repository.EnchereAdminRepository;
 import com.ve.ve.Repository.ProduitRepository;
 import com.ve.ve.Repository.StatistiqueCategorieRepository;
 import com.ve.ve.Repository.StatistiqueChiffreAffaireRepository;
@@ -48,6 +52,9 @@ public class VenteEchereBack {
 
     @Autowired
     private ProduitRepository produitRepository;
+
+    @Autowired
+    private EnchereAdminRepository enchereAdminRepository;
 
     /* LOGIN */
     @RequestMapping(value = "/login/traitement", method = RequestMethod.POST, produces = "application/json")
@@ -130,7 +137,7 @@ public class VenteEchereBack {
         return "listeCategorie";
     }
 
-    /*Miora */
+    /* Miora */
     /* LOGOUT */
 
     @RequestMapping(value = "/logout", method = RequestMethod.GET, produces = "application/json")
@@ -146,19 +153,19 @@ public class VenteEchereBack {
         return map;
     }
 
-    /*MBOLA */
+    /* MBOLA */
     @GetMapping("/statistiqueCategorie")
     public String viewStatistique() {
         return "statistique";
     }
 
-    @RequestMapping("/piechartdata")
+    @RequestMapping("/statistique")
     @ResponseBody
     // public ResponseEntity<?> getDataForPiechart(){
     public String getDataForPiechart() {
-        //ArrayList<StatistiqueCategorie> piechartData = statistiqueCategorie.getAll();
+        // ArrayList<StatistiqueCategorie> piechartData = statistiqueCategorie.getAll();
         // return new ResponseEntity<>(piechartData, HttpStatus.OK);
-        ArrayList<StatistiqueCategorie> dataList = statistiqueCategorie.getAll();       
+        ArrayList<StatistiqueCategorie> dataList = statistiqueCategorie.getAll();
         JsonArray jsonArrayCategory = new JsonArray();
         JsonArray jsonArraySeries = new JsonArray();
         JsonArray jsonArraymois = new JsonArray();
@@ -169,9 +176,9 @@ public class VenteEchereBack {
             jsonArraySeries.add(data.getCategorie());
         });
         ArrayList<StatistiqueChiffreAffaire> dataList1 = statistiqueChiffreAffaire.getAll();
-        dataList1.forEach(data -> { 
+        dataList1.forEach(data -> {
             jsonArraymois.add(data.getNomMois());
-            jsonArraymontant.add(data.getMontant()); 
+            jsonArraymontant.add(data.getMontant());
         });
         jsonObject.add("nombre", jsonArrayCategory);
         jsonObject.add("categorie", jsonArraySeries);
@@ -196,37 +203,37 @@ public class VenteEchereBack {
         return jsonObject.toString();
     }
 
-    /*MIORA */
+    /* MIORA */
     @GetMapping("/validationCompte")
-   // @ResponseBody
-    public String validationCompte(Model model){
-        model.addAttribute("demande",user.getListeDemande());
+    // @ResponseBody
+    public String validationCompte(Model model) {
+        model.addAttribute("demande", user.getListeDemande());
         return "rechargementCompte";
     }
 
-    @GetMapping("/validerdemande/{id}/{etat}")
+    @PutMapping("/validerdemande/{id}/{etat}")
     @ResponseBody
-     public Map<String, Object> validerdemande(@PathVariable int id ,@PathVariable int etat){
+    public Map<String, Object> validerdemande(@PathVariable int id, @PathVariable int etat) {
         Map<String, Object> map = new HashMap<>();
         user.validerRechargementCompte(id, etat);
-        map.put("Status","Success");
+        map.put("Status", "Success");
         return map;
     }
 
     @GetMapping("/voircommission")
-    public String voircommission(Model model){
+    public String voircommission(Model model) {
         model.addAttribute("commission", categorie.getCommission());
         return "commission";
     }
 
     @PutMapping("/updatecommission/{pourcentage}")
     @ResponseBody
-    public Map<String, Object> updateCommission(@PathVariable double pourcentage){
+    public Map<String, Object> updateCommission(@PathVariable double pourcentage) {
         Map<String, Object> map = new HashMap<>();
-        Commission com=new Commission();
+        Commission com = new Commission();
         com.setPourcentage(pourcentage);
         categorie.updateCommission(com);
-        map.put("Status","Success");
+        map.put("Status", "Success");
         return map;
     }
 
@@ -243,7 +250,7 @@ public class VenteEchereBack {
     @ResponseBody
     @CrossOrigin
     public void insertProduit(HttpServletRequest request) {
-        Produit produit=new Produit();
+        Produit produit = new Produit();
         produit.setProduit(request.getParameter("produit"));
         produit.setCategorie(Integer.parseInt(request.getParameter("categorie")));
         produitRepository.insertProduit(produit);
@@ -258,5 +265,49 @@ public class VenteEchereBack {
         return map;
     }
 
+    @GetMapping("/listeEnchereAdmin")
+    public String listeEnchereAdmin(Model model) {
+        ArrayList<EnchereAdmin> listeEnchereAdmin = enchereAdminRepository.getAll();
+        model.addAttribute("enchereAdmin", listeEnchereAdmin);
+        ArrayList<Categorie> listeCategorie = categorie.getCategorieSansDuree();
+        model.addAttribute("categorie", listeCategorie);
+        return "parametreDureeEnchere";
+    }
+
+    @RequestMapping(value = "/insertEnchereAdmin", method = RequestMethod.POST, produces = "application/json")
+    @ResponseBody
+    @CrossOrigin
+    public void insertEnchereAdmin(HttpServletRequest request) {
+        EnchereAdmin enchereAdmin = new EnchereAdmin();
+        enchereAdmin.setCategorieId(Integer.parseInt(request.getParameter("categorie")));
+        enchereAdmin.setDuree(Double.parseDouble(request.getParameter("duree")));
+        enchereAdminRepository.insertEnchereAdmin(enchereAdmin);
+    }
+
+    @RequestMapping(value = "/listeEnchereAdminWs", method = RequestMethod.GET, produces = "application/json")
+    @ResponseBody
+    @CrossOrigin
+    public Map<String, Object> listeEnchereAdminWs(HttpServletRequest request) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("enchereAdmin", enchereAdminRepository.getAll());
+        return map;
+    }
+
+    @RequestMapping(value = "/updateEnchereAdminWs", method = RequestMethod.PUT, produces = "application/json")
+    @ResponseBody
+    @CrossOrigin
+    public void updateEnchereAdmin(HttpServletRequest request) {
+        double duree = Double.parseDouble(request.getParameter("duree"));
+        int id = Integer.parseInt(request.getParameter("id"));
+        enchereAdminRepository.updateEnchereAdmin(id, duree);
+    }
+
+    @RequestMapping("/getInfoToUpdate")
+    @ResponseBody
+    public ResponseEntity<?> getInfoToUpdate(HttpServletRequest request) {
+        ArrayList<EnchereAdmin> liste = enchereAdminRepository
+                .getEnchereAdminById(Integer.parseInt(request.getParameter("id")));
+        return new ResponseEntity<>(liste, HttpStatus.OK);
+    }
 
 }
