@@ -48,7 +48,7 @@ public class MongoController {
             Claims cl = tok.testTokenClaims(token);
             photoenchere.setIdEnchere(id);
             for (int i = 0; i < photos.length; i++) {
-                photoenchere.setPhoto(photos[i].getBase64().split("data:image/png;base64,")[1]);
+                photoenchere.setPhoto(photos[i].getBase64());
                 photo.insert(photoenchere);
             }
             System.out.println("Token : " + token);
@@ -88,8 +88,10 @@ public class MongoController {
     @RequestMapping(value = "/getPhotoEnchere/{id}", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
     @CrossOrigin
-    public List<PhotoEnchere> getPhoto(@PathVariable int id) {
-        return photo.findByIdEnchere(id);
+    public Map<String, Object> getPhoto(@PathVariable int id) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("photo", photo.findByIdEnchere(id));
+        return map;
     }
 
 }
