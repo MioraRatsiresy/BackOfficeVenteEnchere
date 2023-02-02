@@ -36,5 +36,13 @@ public class MesEncheresRepository implements MesEncheresDAO{
         String sql = "select * from getInfoEnchere() where idenchere="+id;
         return (ArrayList<MesEncheres>) jdbcTemplate.query(sql,new BeanPropertyRowMapper<MesEncheres>(MesEncheres.class));
     }
+    @Override
+    public ArrayList<MesEncheres> getInfoEnchere(int idEnchere) {
+        String sql = "select * from getInfoEnchere() where idenchere=" + idEnchere;
+        System.out.println("Requete : " + sql);
+        return (ArrayList<MesEncheres>) jdbcTemplate.query(sql,
+                new BeanPropertyRowMapper<MesEncheres>(MesEncheres.class));
+    }
+
 
 }
