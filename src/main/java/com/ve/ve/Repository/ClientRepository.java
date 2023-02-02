@@ -51,4 +51,6 @@ public class ClientRepository implements ClientDAO {
         return (ArrayList<Client>) jdbcTemplate.query(sql, new BeanPropertyRowMapper<Client>(Client.class));
     }
 
+    
+
 }
