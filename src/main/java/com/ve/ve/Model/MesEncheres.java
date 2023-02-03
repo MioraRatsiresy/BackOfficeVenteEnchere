@@ -229,14 +229,4 @@ public class MesEncheres {
     public void setClient(Object client) {
         this.client = client;
     }
-    private List<PhotoEnchere> photos;
-
-    public List<PhotoEnchere> getPhotos() {
-        return photos;
-    }
-
-    public void setPhotos(List<PhotoEnchere> photos) {
-        this.photos = photos;
-    }
-    
 }

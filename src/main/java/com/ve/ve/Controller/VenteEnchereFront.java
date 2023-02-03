@@ -51,11 +51,7 @@ public class VenteEnchereFront {
     @CrossOrigin
     public Map<String, Object> listeEnchere() {
         Map<String, Object> map = new HashMap<>();
-        ArrayList<MesEncheres> enchere=mesEncheresRepository.getListeEnchere();
-        for(int i=0;i<enchere.size();i++){
-            enchere.get(i).setPhotos(photo.findByIdEnchere(i));
-        }
-        map.put("enchere",enchere);
+        map.put("enchere",mesEncheresRepository.getListeEnchere());
         return map;
     }
 
@@ -64,11 +60,7 @@ public class VenteEnchereFront {
     @CrossOrigin
     public Map<String, Object> ficheenchere(@PathVariable int id) {
         Map<String, Object> map = new HashMap<>();
-        ArrayList<MesEncheres> enchere=mesEncheresRepository.getFicheEnchere(id);
-        for(int i=0;i<enchere.size();i++){
-            enchere.get(i).setPhotos(photo.findByIdEnchere(i));
-        }
-        map.put("fiche",enchere);
+        map.put("fiche",mesEncheresRepository.getFicheEnchere(id));
         return map;
     }
 
