@@ -37,7 +37,6 @@ public class MongoController {
     public Map<String, Object> insertPhoto(@RequestBody UserPhoto[] photos, @PathVariable int id,
             HttpServletRequest request,
             @PathVariable String token) {
-        System.out.println("Insert photo");
         Map<String, Object> map = new HashMap<>();
         PhotoEnchere photoenchere = new PhotoEnchere();
         System.out.println("Taille :" + photos.length);
@@ -51,7 +50,6 @@ public class MongoController {
             }
             System.out.println("Token : " + token);
             System.out.println("Image en base 64 lol : " + photo);
-            System.out.println("ok");
             map.put("Status", "Insertion avec succes");
         } catch (Exception e) {
             map.put("Erreur", e.getMessage());
