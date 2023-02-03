@@ -2,9 +2,6 @@ package com.ve.ve.Gestiontoken;
 
 import java.util.Date;
 
-import javax.servlet.http.HttpServletRequest;
-
-import com.ve.ve.Model.AdminLogin;
 import com.ve.ve.Model.Client;
 
 import io.jsonwebtoken.Claims;

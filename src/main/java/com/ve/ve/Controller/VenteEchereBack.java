@@ -121,16 +121,19 @@ public class VenteEchereBack {
      * MIORA
      ******************************************************************/
     @GetMapping("/index")
+    @CrossOrigin
     public String index() {
         return "index";
     }
 
     @GetMapping("/accueil")
+    @CrossOrigin
     public String accueil() {
         return "accueil";
     }
 
     @GetMapping("/afficherListeCategorie")
+    @CrossOrigin
     public String afficherListeCategorie(Model model) {
         ArrayList<Categorie> listeCategorie = categorie.getCategorie();
         model.addAttribute("categorie", listeCategorie);
@@ -155,12 +158,14 @@ public class VenteEchereBack {
 
     /* MBOLA */
     @GetMapping("/statistiqueCategorie")
+    @CrossOrigin
     public String viewStatistique() {
         return "statistique";
     }
 
     @RequestMapping("/statistique")
     @ResponseBody
+    @CrossOrigin
     // public ResponseEntity<?> getDataForPiechart(){
     public String getDataForPiechart() {
         // ArrayList<StatistiqueCategorie> piechartData = statistiqueCategorie.getAll();
@@ -189,6 +194,7 @@ public class VenteEchereBack {
 
     @RequestMapping("/linechartdata")
     @ResponseBody
+    @CrossOrigin
     public String getDataFromDB() {
         ArrayList<StatistiqueChiffreAffaire> dataList = statistiqueChiffreAffaire.getAll();
         JsonArray jsonArrayCategory = new JsonArray();
@@ -205,6 +211,7 @@ public class VenteEchereBack {
 
     /* MIORA */
     @GetMapping("/validationCompte")
+    @CrossOrigin
     // @ResponseBody
     public String validationCompte(Model model) {
         model.addAttribute("demande", user.getListeDemande());
@@ -213,6 +220,7 @@ public class VenteEchereBack {
 
     @PutMapping("/validerdemande/{id}/{etat}")
     @ResponseBody
+    @CrossOrigin
     public Map<String, Object> validerdemande(@PathVariable int id, @PathVariable int etat) {
         Map<String, Object> map = new HashMap<>();
         user.validerRechargementCompte(id, etat);
@@ -221,6 +229,7 @@ public class VenteEchereBack {
     }
 
     @GetMapping("/voircommission")
+    @CrossOrigin
     public String voircommission(Model model) {
         model.addAttribute("commission", categorie.getCommission());
         return "commission";
@@ -228,6 +237,7 @@ public class VenteEchereBack {
 
     @PutMapping("/updatecommission/{pourcentage}")
     @ResponseBody
+    @CrossOrigin
     public Map<String, Object> updateCommission(@PathVariable double pourcentage) {
         Map<String, Object> map = new HashMap<>();
         Commission com = new Commission();
@@ -238,6 +248,7 @@ public class VenteEchereBack {
     }
 
     @GetMapping("/afficherListeProduit")
+    @CrossOrigin
     public String afficherListeProduit(Model model) {
         ArrayList<Produit> listeProduit = produitRepository.getAll();
         model.addAttribute("produit", listeProduit);
@@ -266,6 +277,7 @@ public class VenteEchereBack {
     }
 
     @GetMapping("/listeEnchereAdmin")
+    @CrossOrigin
     public String listeEnchereAdmin(Model model) {
         ArrayList<EnchereAdmin> listeEnchereAdmin = enchereAdminRepository.getAll();
         model.addAttribute("enchereAdmin", listeEnchereAdmin);
@@ -304,6 +316,7 @@ public class VenteEchereBack {
 
     @RequestMapping("/getInfoToUpdate")
     @ResponseBody
+    @CrossOrigin
     public ResponseEntity<?> getInfoToUpdate(HttpServletRequest request) {
         ArrayList<EnchereAdmin> liste = enchereAdminRepository
                 .getEnchereAdminById(Integer.parseInt(request.getParameter("id")));

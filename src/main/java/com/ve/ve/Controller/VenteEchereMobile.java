@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ve.ve.Gestiontoken.GestionToken;
 import com.ve.ve.Model.CompteClient;
-import com.ve.ve.Model.Enchere;
 import com.ve.ve.Repository.AdminLoginRepository;
 import com.ve.ve.Repository.CategorieRepository;
 import com.ve.ve.Repository.ClientRepository;
@@ -84,7 +83,7 @@ public class VenteEchereMobile {
         try {
             Claims cl = tok.testTokenClaims(token);
             client.rechargerMonCompte(compte);
-            map.put("Status","Rechargment du compte avec succes");
+            map.put("Status","Rechargement du compte avec succes");
         }
         catch(Exception e){
             map.put("Erreur",e.getMessage());
@@ -144,9 +143,7 @@ public class VenteEchereMobile {
     public Map<String, Object> getClientById(HttpServletRequest request, @PathVariable int id,
             @PathVariable String token) {
         Map<String, Object> map = new HashMap<>();
-        // GestionToken tok = new GestionToken();
         try {
-            // Claims cl = tok.testTokenClaims(token);
             map.put("client", client.getClientById(id));
         } catch (Exception e) {
             e.printStackTrace();
@@ -161,7 +158,6 @@ public class VenteEchereMobile {
     public Map<String, Object> soldeClient(HttpServletRequest request, @PathVariable int id) {
         Map<String, Object> map = new HashMap<>();
         try {
-            // map.put("Status","Succes");
             map.put("solde", compteClient.getSolde(id));
         } catch (Exception e) {
             e.printStackTrace();
