@@ -121,7 +121,7 @@ public class VenteEnchereFront {
         }
     }
 
-    @RequestMapping(value = "/incriptionClient", method = RequestMethod.POST, produces = "application/json")
+    @RequestMapping(value = "/inscriptionClient", method = RequestMethod.POST, produces = "application/json")
     @ResponseBody
     @CrossOrigin
     public Map<String, Object> inscriptionClient(HttpServletRequest request) {
@@ -133,6 +133,11 @@ public class VenteEnchereFront {
         client.setIdentifiant(request.getParameter("identifiant"));
         client.setPwd(request.getParameter("pwd"));
         clientRepository.inscriptionClient(client);
+        GestionToken tok = new GestionToken();
+        ArrayList<Client> resultat = clientRepository.verifyLogin(request.getParameter("identifiant"), request.getParameter("pwd"));
+        map.put("iduser", resultat.get(0).getId());
+        map.put("token", tok.generateToken(resultat.get(0)));
+        map.put("date d'expiration", tok.expirationdateToken(tok.generateToken(resultat.get(0))).toString());
         map.put("message", "Insertion effectuée avec succès");
         map.put("status", "Succès");
         return map;
