@@ -297,10 +297,6 @@ when m.mois='Decembre' then 12
 end as mois,
 m.mois as nomMois from v_chiffreAffaireMois v right join mois m on m.id=v.mois;
 
-create or replace view v_enchereEnCours as 
-select*, dateheure+interval '1 day'*duree as datefin from encheredetail where dateheure<=current_timestamp and current_timestamp<=dateheure+interval '1 day'*duree and etat='0';
-
-
 
 CREATE OR REPLACE VIEW encheretemp as  SELECT Enchere.*,MiserENchere.idclient as client,case when MiserENchere.montant is null then prixMin else MiserENchere.montant end as montant,Client.nom,Client.prenom from Enchere left join miserenchere on miserenchere.idEnchere=enchere.id left  join Client on Client.id=MiserEnchere.idclient;
 
