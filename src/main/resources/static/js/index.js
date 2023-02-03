@@ -115,7 +115,7 @@ function viewStatistique() {
 			drawLineChart(category, series);
 		}
 	}
-	xmlhttp.open("GET", "https://backofficeventeenchere-production.up.railway.app/statistique");
+	xmlhttp.open("GET", "https://backofficeventeenchere-production-db7d.up.railway.app/statistique");
 	xmlhttp.send();
 }
 
