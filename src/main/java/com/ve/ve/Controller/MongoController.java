@@ -1,7 +1,6 @@
 package com.ve.ve.Controller;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,7 +19,6 @@ import com.ve.ve.Model.MiserEnchere;
 import com.ve.ve.Model.PhotoEnchere;
 import com.ve.ve.Model.UserPhoto;
 import com.ve.ve.Repository.EnchereRepository;
-import com.ve.ve.Repository.MiserEnchereRepository;
 import com.ve.ve.Repository.PhotoEnchereRepository;
 
 import io.jsonwebtoken.Claims;
